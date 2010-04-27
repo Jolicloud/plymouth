@@ -1,0 +1,11 @@
+bin/plymouth
+sbin/plymouthd
+lib/plymouth/script.so
+lib/plymouth/renderers/drm.so
+lib/plymouth/renderers/frame-buffer.so
+lib/plymouth/details.so
+lib/plymouth/themes/details/
+var/lib/plymouth/
+var/spool/plymouth/
+debian/ubuntu-logo.png		lib/plymouth
+debian/initramfs-tools          usr/share

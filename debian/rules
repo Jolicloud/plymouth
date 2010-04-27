@@ -1,0 +1,74 @@
+#!/usr/bin/make -f
+%:
+	dh $@
+
+
+CFLAGS = -Wall -g
+LDFLAGS = -Wl,--as-needed
+
+# Disable optimisations if noopt found in $DEB_BUILD_OPTIONS
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+	LDFLAGS += -Wl,-O0
+else
+	CFLAGS += -O2
+	LDFLAGS += -Wl,-O1
+endif
+
+# This renderer is only available on architectures that are sufficiently
+# PC-like
+ifneq (,$(filter $(DEB_HOST_ARCH),amd64 armel i386 ia64))
+	VGA_RENDERER=lib/plymouth/renderers/vga16fb.so
+endif	
+
+override_dh_auto_configure:
+	dh_auto_configure -- CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" \
+		--libdir=/lib \
+		--datadir=/lib \
+		--enable-tracing \
+		--disable-tests \
+		--disable-maintainer-mode \
+		--disable-gdm-transition \
+		--with-system-root-install \
+		--without-rhgb-compat-link \
+		--without-gdm-autostart-file \
+		--without-default-plugin   \
+		--with-logo=/lib/plymouth/ubuntu-logo.png \
+		--with-background-color=0x2c001e \
+		--with-background-start-color-stop=0x2c001e \
+		--with-background-end-color-stop=0x2c001e \
+		--with-boot-tty=/dev/tty7 \
+		--with-shutdown-tty=/dev/tty7
+
+override_dh_auto_install:
+	dh_auto_install
+	mkdir -p debian/tmp/usr/share/apport/package-hooks
+	install -m 644 debian/libplymouth2.apport debian/tmp/usr/share/apport/package-hooks/source_plymouth.py
+
+override_dh_install:
+	sed -e'/frame-buffer\.so$$/a\
+$(VGA_RENDERER)' < debian/plymouth.install.in > debian/plymouth.install
+	dh_install
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -f debian/plymouth.install
+
+# Don't start plymouth when installing!
+override_dh_installinit:
+	dh_installinit --noscripts
+	dh_installinit --name=plymouth-log --noscripts
+	dh_installinit --name=plymouth-splash --noscripts
+	dh_installinit --name=plymouth-stop --noscripts
+
+# Make the initramfs scripts executable
+override_dh_fixperms:
+	dh_fixperms
+	chmod 755 debian/plymouth/usr/share/initramfs-tools/hooks/plymouth
+	chmod 755 debian/plymouth/usr/share/initramfs-tools/scripts/init-top/plymouth
+	chmod 755 debian/plymouth/usr/share/initramfs-tools/scripts/init-bottom/plymouth
+	chmod 755 debian/plymouth/usr/share/initramfs-tools/scripts/panic/plymouth
+
+# Don't generate shlibs for plugins (ideally these wouldn't have a SONAME)
+override_dh_makeshlibs:
+	dh_makeshlibs -X/lib/plymouth/
