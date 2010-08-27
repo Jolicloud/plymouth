@@ -1,0 +1,4 @@
+[Plymouth Theme]
+Name=Jolicloud Text
+Description=Text mode theme based on jolicloud-logo theme
+ModuleName=jolicloud-text

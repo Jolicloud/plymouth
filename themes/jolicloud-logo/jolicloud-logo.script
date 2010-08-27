@@ -1,0 +1,710 @@
+#  jolicloud-logo.script - boot splash plugin
+# 
+#  Copyright (C) 2009 Canonical Ltd.
+# 
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2, or (at your option)
+#  any later version.
+# 
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+# 
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+#  02111-1307, USA.
+# 
+#  Written by: Alberto Milone <alberto.milone@canonical.com>
+#
+#  Based on the example provided with the "script plugin" written by:
+#              Charlie Brej   <cbrej@cs.man.ac.uk>
+# 
+
+# Set the text colour in rgb
+text_colour.red = 255;
+text_colour.green = 255;
+text_colour.blue = 255;
+
+debugsprite = Sprite();
+debugsprite_bottom = Sprite();
+debugsprite_medium = Sprite();
+
+fun ImageToText (text) {
+    image = Image.Text (text, text_colour.red, text_colour.green, text_colour.blue);
+    return image;
+}
+
+fun Debug(text) {
+    debugsprite.SetImage(ImageToText (text));
+}
+
+fun DebugBottom(text) {
+    debugsprite_bottom.SetImage(ImageToText (text));
+    debugsprite_bottom.SetPosition(0, (Window.GetHeight (0) - 20), 1);
+}
+
+fun DebugMedium(text) {
+    debugsprite_medium.SetImage(ImageToText (text));
+    debugsprite_medium.SetPosition(0, (Window.GetHeight (0) - 60), 1);
+}
+
+Window.SetBackgroundTopColor (0.15, 0.16, 0.18);     # Nice colour on top of the screen fading to
+Window.SetBackgroundBottomColor (0.15, 0.16, 0.18);  # an equally nice colour on the bottom
+
+
+logo.image = Image ("jolicloud_logo.png");
+
+logo.sprite = Sprite ();
+logo.sprite.SetImage (logo.image);
+
+logo.width = logo.image.GetWidth ();
+logo.height = logo.image.GetHeight ();
+logo.x = Window.GetWidth (0)  / 2 - logo.width  / 2;
+logo.y = 20;
+logo.z = 1000;
+logo.sprite.SetX (logo.x);
+# label_area_y = logo_area_y + (*label_height * 2) + 60;
+logo.sprite.SetY (logo.y);
+logo.sprite.SetY (logo.z);
+logo.sprite.SetOpacity (1);
+
+# Spacing below the logo - in pixels
+logo_spacing = 0;
+
+message_notification.image = ImageToText ("");
+
+status = "normal";
+
+
+
+#-----------------------------------------Label utility functions---------------------
+
+fun get_label_position (label, is_fake) {
+    # Debug("Get Label position");
+    screen_width = Window.GetWidth (0);
+    screen_height = Window.GetHeight (0);
+    local.message_label;
+    
+    if (is_fake) {
+        # Create a fake label so as to get the y coordinate of
+        # a standard-lenght label.
+        # This is useful when prompting without providing a
+        # message
+        local.message_image = ImageToText ("This is a fake message");
+        message_label.width = message_image.GetWidth ();
+        message_label.height = message_image.GetHeight ();
+    }
+    else {
+        local.message_image = ImageToText (label);
+        message_label.width = message_image.GetWidth ();
+        message_label.height = message_image.GetHeight ();
+    }
+    
+    # Centre the label horizontally
+    message_label.x = (screen_width / 2) - (message_label.width / 2);
+    
+    # Place the label below the logo 
+    message_label.y = logo.y + logo.height + logo_spacing; # message_label.height / 2;
+    
+#    message_debug = "msg_x = " + message_label.x + " msg_y = " + message_label.y +
+#                    "msg_width = " + message_label.width + " msg_height = " +
+#                    message_label.height + " message = " + label;
+#    Debug(message_debug);
+    
+    return message_label;
+}
+
+
+#-----------------------------------------Display Password stuff -----------------------
+#
+
+fun password_dialogue_setup(message_label) {
+    # Debug("Password dialog setup");
+    
+    local.box;
+    local.lock;
+    local.entry;
+    local.bullet_image;
+    local.is_fake = 0;
+    
+    bullet_image = Image ("bullet.png");
+    box.image = Image ("box.png");
+    entry.image = Image ("entry.png");
+    lock.image = Image ("lock.png");
+    
+    if (!message_label) is_fake = 1;
+    
+    local.label = get_label_position(message_label, is_fake);
+
+    label.is_fake = is_fake;
+    
+    # Make sure that the prompt label is placed below the message label
+    # NOTE: here we assume that all labels have the same height.
+    label.y += label.height;
+
+    # Set up the text message, if any
+    if (!is_fake) {
+        label.z = 10000;
+        label.image = ImageToText (message_label);
+        label.sprite = Sprite ();
+        label.sprite.SetImage (label.image);
+        label.sprite.SetX (label.x);
+        label.sprite.SetY (label.y);
+        label.sprite.SetZ (label.z);
+    }
+    
+    # Set up the box area which contains the text entry and the lock icon
+    box.sprite = Sprite ();
+    box.sprite.SetImage (box.image);
+    # Centre the box horizontally
+    box.x = Window.GetWidth (0)  / 2 - box.image.GetWidth () / 2;
+    # Put the box below the label. Leave the space for 2 labels.
+    box.y = label.y + label.height * 2;
+    box.z = 10000;
+    box.sprite.SetX (box.x);
+    box.sprite.SetY (box.y);
+    box.sprite.SetZ (box.z);
+
+
+    # Set up the lock icon
+    lock.sprite = Sprite ();
+    lock.sprite.SetImage (lock.image);
+    lock.x = (Window.GetWidth (0)  / 2) - ((lock.image.GetWidth () + entry.image.GetWidth ()) / 2);
+    lock.y = box.y + (box.image.GetHeight () / 2) - (lock.image.GetHeight () / 2);
+    lock.z = box.z + 1;
+    lock.sprite.SetX (lock.x);
+    lock.sprite.SetY (lock.y);
+    lock.sprite.SetZ (lock.z);
+
+
+    # Set up the text entry
+    entry.sprite = Sprite ();
+    entry.sprite.SetImage (entry.image);
+    # FIXME: Maybe we should add some horizontal space between the icon and the entry?
+    entry.x = lock.x + lock.image.GetWidth ();
+    entry.y = box.y + (box.image.GetHeight () / 2) - (entry.image.GetHeight () / 2);    
+    entry.z = lock.z;
+    
+    entry.sprite.SetX (entry.x);
+    entry.sprite.SetY (entry.y);
+    entry.sprite.SetZ (entry.z);
+
+    
+    global.password_dialogue = local;
+}
+
+fun password_dialogue_opacity (opacity) {
+    # Debug("Password dialog opacity");
+    global.password_dialogue.opacity = opacity;
+    local = global.password_dialogue;
+
+    # You can make the box translucent with a float
+    # box.sprite.SetOpacity (0.3);
+    box.sprite.SetOpacity (opacity);
+
+    lock.sprite.SetOpacity (opacity);
+    entry.sprite.SetOpacity (opacity);
+    if (!label.is_fake) label.sprite.SetOpacity (opacity);
+    
+    for (index = 0; bullet[index]; index++) {
+        bullet[index].sprite.SetOpacity (opacity);
+    }
+}
+
+
+# The callback function is called when the display should display a password dialogue.
+# First arg is prompt string, the second is the number of bullets.
+fun display_password_callback (prompt, bullets) {
+    # Debug("Password dialog setup");
+    
+    global.status = "password";
+    if (!global.password_dialogue) password_dialogue_setup(prompt);
+    password_dialogue_opacity (1);
+    bullet_width = password_dialogue.bullet_image.GetWidth();
+    bullet_y = password_dialogue.entry.y +
+               password_dialogue.entry.image.GetHeight () / 2 -
+               password_dialogue.bullet_image.GetHeight () / 2;
+    spaces = Math.Int(password_dialogue.entry.image.GetWidth () / bullet_width);
+    if (bullets > spaces)
+        bullets = spaces;
+    for (index = 0; password_dialogue.bullet[index] || index < bullets; index++){
+        if (!password_dialogue.bullet[index]) {
+            password_dialogue.bullet[index].sprite = Sprite ();
+            password_dialogue.bullet[index].sprite.SetImage (password_dialogue.bullet_image);
+            password_dialogue.bullet[index].x = password_dialogue.entry.x +
+                                                index * bullet_width;
+            password_dialogue.bullet[index].sprite.SetX (password_dialogue.bullet[index].x);
+            password_dialogue.bullet[index].y = bullet_y;
+            password_dialogue.bullet[index].sprite.SetY (password_dialogue.bullet[index].y);
+            password_dialogue.bullet[index].z = password_dialogue.entry.z + 1;
+            password_dialogue.bullet[index].sprite.SetZ (password_dialogue.bullet[index].z);
+        }
+
+        password_dialogue.bullet[index].sprite.SetOpacity (0);
+
+        if (index < bullets) {
+            password_dialogue.bullet[index].sprite.SetOpacity (1);
+        }
+    }
+}
+
+Plymouth.SetDisplayPasswordFunction (display_password_callback); 
+
+
+
+
+#-----------------------------------------Message stuff --------------------------------
+#
+
+# Set up a message label
+#
+# NOTE: this is called when doing something like 'plymouth message "hello world"'
+#
+fun setup_message (message_text, x, y, z) {
+    # Debug("Message setup");
+    message_notification.image = ImageToText (message_text);
+
+    # Set up the text message, if any
+    message_notification.x = x;
+    message_notification.y = y;
+    message_notification.z = z;
+    
+    message_notification.sprite = Sprite ();
+    message_notification.sprite.SetImage (message_notification.image);
+    message_notification.sprite.SetX (message_notification.x);
+    message_notification.sprite.SetY (message_notification.y);
+    message_notification.sprite.SetZ (message_notification.z);
+
+}
+
+fun show_message () {
+    if (global.message_notification.sprite) global.message_notification.sprite.SetOpacity(1);
+}
+
+fun hide_message () {
+    if (global.message_notification.sprite) global.message_notification.sprite.SetOpacity(0);
+}
+
+
+# the callback function is called when new message should be displayed.
+# First arg is message to display.
+fun message_callback (message)
+{
+    # Debug("Message callback");
+    is_fake = 0;
+    if (!message || (message == "")) is_fake = 1;
+    
+    local.label.is_fake = is_fake;
+    label = get_label_position(message, is_fake);
+    label.z = 10000;
+    
+    setup_message (message, label.x, label.y, label.z);
+    show_message ();
+
+}
+Plymouth.SetMessageFunction (message_callback);
+
+
+# Plymouth.SetBootProgressFunction: the callback function is called with two numbers, the progress (between 0 and 1) and the time spent booting so far
+# Plymouth.SetRootMountedFunction: the callback function is called when a new root is mounted
+# Plymouth.SetKeyboardInputFunction: the callback function is called with a string containing a new character entered on the keyboard
+
+#----------------------------------------- FSCK Queue ----------------------------------
+
+# Initialise the fsck queue
+fun init_queue () {
+    global.fsck_queue[0].device;
+    global.fsck_queue[0].progress;
+    global.fsck_queue.counter = 0;
+    global.fsck_queue.biggest_item = 0;    
+}
+
+fun clear_queue () {
+    global.fsck_queue = NULL;
+    init_queue ();
+}
+
+# Return either the device index in the queue or -1
+fun queue_look_up_by_device (device) {
+    for (i=0; i <= fsck_queue.biggest_item; i++) {
+        if ((fsck_queue[i]) && (fsck_queue[i].device == device))
+            return i;
+    }
+    return -1;
+}
+
+# Keep track of an fsck process in the queue
+fun add_fsck_to_queue (device, progress) {
+    # Look for an empty slot in the queue
+    for (i=0; global.fsck_queue[i].device; i++) {
+        continue;
+    }
+    local.index = i;
+    
+    # Set device and progress
+    global.fsck_queue[local.index].device = device;
+    global.fsck_queue[local.index].progress = progress;
+    
+    # Increase the queue counter
+    global.fsck_queue.counter++;
+    
+    # Update the max index of the array for iterations
+    if (local.index > global.fsck_queue.biggest_item)
+        global.fsck_queue.biggest_item = local.index;
+    
+#    DebugMedium ("Adding " + device + " at " + local.index);
+}
+
+# This should cover the case in which the fsck checks in
+# the queue are completed before the ones showed in the
+# progress bars
+fun on_queued_fsck_completed () {
+    if (!is_queue_empty ())
+        return;
+    
+    # Hide the extra label, if any
+    if (progress_bar.extra_label.sprite)
+        progress_bar.extra_label.sprite.SetOpacity(0);
+}
+
+fun remove_fsck_from_queue (index) {
+    # Free memory which was previously allocated for
+    # device and progress
+    global.fsck_queue[index].device = NULL;
+    global.fsck_queue[index].progress = NULL;
+
+    # Decrease the queue counter
+    global.fsck_queue.counter--;
+    
+    # See if there are other processes in the queue
+    # if not, clear the extra_label
+    on_queued_fsck_completed ();
+}
+
+fun is_queue_empty () {
+    return (fsck_queue.counter == 0);
+}
+
+fun on_fsck_completed () {
+    if (!are_bars_empty ())
+        return;
+    
+    if (!is_queue_empty ())
+        return;
+    
+    # Hide all progress bars
+    for (index=0; index < progress_bar.max_number; index++) {
+        set_bar_opacity (index, 0);
+    }
+    
+    # Make sure that the bar counter is 0
+    progress_bar.counter = 0;
+    
+    # Hide the extra label, if any
+    if (progress_bar.extra_label.sprite)
+        progress_bar.extra_label.sprite.SetOpacity(0);
+    
+    # Clear the queue
+    clear_queue ();
+}
+
+# Update an fsck process that we keep track of in the queue
+fun update_progress_in_queue (index, device, progress) {
+    # If the fsck is complete, remove it from the queue
+    if (progress >= 100) {
+        remove_fsck_from_queue (index);
+        on_queued_fsck_completed ();
+        return;
+    }
+    
+    global.fsck_queue[index].device = device;
+    global.fsck_queue[index].progress = progress;
+    
+}
+
+# Create an empty queue
+init_queue ();
+
+#----------------------------------------- Progress Bar --------------------------------
+
+progress_box.image = Image("progress_box.png");
+progress_box.sprite = Sprite(progress_box.image);
+
+progress_box.x = Window.GetWidth()  / 2 -    progress_box.image.GetWidth()  / 2;
+progress_box.y = logo.y + logo.height + 20;
+progress_box.sprite.SetPosition(progress_box.x, progress_box.y, 0);
+
+progress_left.image = Image("progress_left.png");
+progress_left.sprite = Sprite(progress_left.image);
+
+progress_left.x = Window.GetWidth()  / 2 -       progress_box.image.GetWidth()  / 2;
+progress_left.y = logo.y + logo.height + 20;
+progress_left.sprite.SetPosition(progress_left.x, progress_left.y, 1);
+
+progress_bar.original_image = Image("progress_bar.png");
+progress_bar.sprite = Sprite();
+
+progress_bar.x = Window.GetWidth()  / 2 -        progress_bar.original_image.GetWidth() / 2;
+progress_bar.y = logo.y + logo.height + 20;
+progress_bar.sprite.SetPosition(progress_bar.x, progress_bar.y, 1);
+
+progress_right.image = Image("progress_right.png");
+progress_right.sprite = Sprite();
+
+progress_right.x = Window.GetWidth()  / 2 -        progress_bar.original_image.GetWidth() / 2;
+progress_right.y = logo.y + logo.height + 20;
+progress_right.sprite.SetPosition(progress_right.x, progress_right.y, 1);
+
+fun progress_callback (duration, progress)
+  {
+    if (progress_bar.image.GetWidth () != Math.Int (progress_bar.original_image.GetWidth () * progress))
+      {
+        progress_bar.image = progress_bar.original_image.Scale(progress_bar.original_image.GetWidth(progress_bar.original_image) * progress, progress_bar.original_image.GetHeight());
+        progress_bar.sprite.SetImage (progress_bar.image);
+	progress_right.x = Window.GetWidth()  / 2  - progress_box.image.GetWidth()  / 2 + progress_bar.original_image.GetWidth(progress_bar.original_image) * progress + 15;
+progress_right.sprite.SetPosition(progress_right.x, progress_right.y, 1);
+	progress_right.sprite.SetImage (progress_right.image);
+      }
+  }
+
+Plymouth.SetBootProgressFunction(progress_callback);
+
+
+#-----------------------------------------Fsck stuff -----------------------------
+#
+
+# Create a label which tells users that other fsck checks are running in the
+# background
+#
+# NOTE: the bar is hidden by default. You can make it visible with SetOpacity(1)
+#
+fun create_extra_fsck_label () {
+
+    message = "Further disk checks are taking place in the background. Please wait...";
+
+    progress_bar.extra_label = get_label_position(message, 0);
+    
+    # Put the label of below the last bar
+    progress_bar.extra_label.y = progress_bar[progress_bar.max_number - 1].y +
+                                    progress_bar.original_image.GetHeight() +
+                                    progress_bar[progress_bar.max_number - 1].label.height;
+
+    progress_bar.extra_label.z = 10000;
+    # Set up the message label
+    progress_bar.extra_label_image = ImageToText (message);
+    progress_bar.extra_label.sprite = Sprite ();
+    progress_bar.extra_label.sprite.SetImage(progress_bar.extra_label_image);
+    progress_bar.extra_label.sprite.SetPosition(progress_bar.extra_label.x,
+                                            progress_bar.extra_label.y,
+                                            progress_bar.extra_label.z);
+    
+    # Keep the bar hidden by default
+    progress_bar.extra_label.sprite.SetOpacity(0);
+}
+
+
+# Either add a new bar for fsck checks or update an existing bar
+#
+# NOTE: no more than "progress_bar.max_number" bars are allowed
+#
+fun fsck_check (device, progress) {
+    
+    # See if we already have a bar for the device check
+    local.device_index = get_progress_bar_index_from_device (device);
+    
+    if (device_index >= 0) {
+#        Debug("Update the progress of the existing bar");
+        # Update the progress of the existing bar
+        update_progress_bar_by_index (device_index, progress);
+    }
+    else {
+        # See if there's already a slot in the queue for the device
+        local.queue_device_index = queue_look_up_by_device(device);
+
+        # See if there is an available slot
+        # NOTE: we don't allow more than "progress_bar.max_number" bars
+        if (progress_bar.counter < progress_bar.max_number) {
+            # Get the index for the 1st available slot
+            local.available_index = get_available_progress_bar_index ();
+            
+#            local.my_string = "available index " + local.available_index + " progress_bar counter is " + progress_bar.counter;
+#            Debug(local.my_string);
+            
+            if (local.available_index >= 0) {
+                
+                # If the fsck check for the device was in the queue, then
+                # remove it from the queue
+                if (local.queue_device_index >= 0)
+                    remove_fsck_from_queue (index);
+                
+                # Set up a new label for the check
+                local.message = "Routine check of drive " + device;
+                
+#                local.my_string += local.message;
+#                Debug(local.my_string);
+
+                # Set up a new bar for the check
+                setup_progress_bar (message, local.available_index, device);
+                update_progress_bar_by_index (local.available_index, progress);
+            }
+            
+        }
+        # If there's no available progress bar slot
+        else {
+            
+            # If the fsck check for the device is already in the queue
+            # just update its progress in the queue
+            if (local.queue_device_index >= 0) {
+#                DebugMedium("Updating queue at " + local.queue_device_index + " for device " + device);
+                update_progress_in_queue (local.queue_device_index, device, progress);
+            }
+            # Otherwise add the check to the queue
+            else {
+#                DebugMedium("Adding device " + device + " to queue at " + local.queue_device_index);
+                add_fsck_to_queue (device, progress);
+            }
+            
+        }
+    }
+    
+    if (!is_queue_empty ()) {
+#        DebugBottom("Extra label for "+ device);
+        # Create a label which tells users that other fsck checks are running in the
+        # background
+        create_extra_fsck_label ();
+        # Make the label visible
+        progress_bar.extra_label.sprite.SetOpacity(1);
+    }
+#    else {
+#        DebugBottom("No extra label for " + device + ". 1st Device in the queue "+ fsck_queue[0].device + " counter = " + global.fsck_queue.counter);
+#    }
+}
+
+# A temporary replacement for atoi()
+# it makes sense to use it only for
+# numbers up to 100
+fun string_to_integer (str) {
+    int = -1;
+    for (i=0; i<=100; i++) {
+        if (i+"" == str) {
+            int = i;
+            break;
+        }
+    }
+    return int;
+}
+
+#-----------------------------------------Update Status stuff --------------------------
+#
+# The update_status_callback is what we can use to pass plymouth whatever we want so
+# as to make use of features which are available only in this program (as opposed to
+# being available for any theme for the script plugin).
+#
+# Example:
+#
+#   Thanks to the current implementation, some scripts can call "plymouth --update=fsck:sda1:40"
+#   and this program will know that 1) we're performing and fsck check, 2) we're checking sda1,
+#   3) the program should set the bar progress to 40%
+#
+# Other features can be easily added by parsing the string that we pass plymouth with "--update"
+#
+fun update_status_callback (status) {
+#    Debug(status);
+    if (!status) return;
+    
+    string_it = 0;
+    update_strings[string_it] = "";
+    
+    for (i=0; (String(status).CharAt(i) != ""); i++) {
+        local.temp_char = String(status).CharAt(i);
+        if (temp_char != ":")
+            update_strings[string_it] += temp_char;
+        else
+            update_strings[++string_it] = "";
+    }
+    
+#    my_string = update_strings[0] + " " + update_strings[1] + " " + update_strings[2];
+#    Debug(my_string);
+    # Let's assume that we're dealing with these strings fsck:sda1:40
+    if ((string_it == 2) && (update_strings[0] == "fsck")) {
+        
+        device = update_strings[1];
+        progress = update_strings[2];
+        
+        if ((device != "") && (progress != "")) {
+            progress = string_to_integer (progress);
+        
+            # Make sure that the fsck_queue is initialised
+            if (!global.fsck_queue)
+                init_queue ();
+            
+            if (!global.progress_bar.extra_label.sprite)
+                create_extra_fsck_label ();
+            
+            # Keep track of the fsck check
+            fsck_check (device, progress);
+        }
+        
+    }
+
+}
+Plymouth.SetUpdateStatusFunction (update_status_callback); 
+
+
+
+#-----------------------------------------Display Question stuff -----------------------
+#
+# TODO: Implement this if needed
+#
+# The callback function is called when the display should display a question dialogue.
+# First arg is prompt string, the second is the entry contents.
+#fun display_question_callback (prompt_string, entry_contents)
+#{
+# time++;
+#}
+#
+#Plymouth.SetDisplayQuestionFunction (display_question_callback); 
+
+#-----------------------------------------Refresh stuff --------------------------------
+#
+# Calling Plymouth.SetRefreshFunction with a function will set that function to be
+# called up to 50 times every second, e.g.
+#
+# NOTE: if a refresh function is not set, Plymouth doesn't seem to be able to update
+#       the screen correctly
+#
+fun refresh_callback ()
+{
+    logo.sprite.SetX (logo.x);
+    logo.sprite.SetY (logo.y);
+    logo.sprite.SetZ (logo.z);
+    logo.sprite.SetOpacity (1);
+}
+Plymouth.SetRefreshFunction (refresh_callback);
+
+
+#-----------------------------------------Display Normal stuff -----------------------
+#
+# The callback function is called when the display should return to normal
+fun display_normal_callback ()
+{
+    global.status = "normal";
+    if (global.password_dialogue) password_dialogue_opacity (0);
+    
+    if (message_notification.sprite) hide_message ();
+}
+
+Plymouth.SetDisplayNormalFunction (display_normal_callback);
+
+
+#----------------------------------------- Quit --------------------------------
+
+fun quit_callback ()
+{
+    logo.sprite.SetOpacity (1);
+}
+
+Plymouth.SetQuitFunction(quit_callback);
