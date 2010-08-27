@@ -7,5 +7,5 @@ lib/plymouth/details.so
 lib/plymouth/themes/details/
 var/lib/plymouth/
 var/spool/plymouth/
-debian/ubuntu-logo.png		lib/plymouth
+debian/jolicloud-logo.png		lib/plymouth
 debian/initramfs-tools          usr/share

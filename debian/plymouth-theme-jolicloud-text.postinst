@@ -20,7 +20,7 @@ case "$1" in
     configure)
 	update-alternatives \
 		--install /lib/plymouth/themes/text.plymouth text.plymouth \
-		/lib/plymouth/themes/ubuntu-text/ubuntu-text.plymouth 50
+		/lib/plymouth/themes/jolicloud-text/jolicloud-text.plymouth 50
 
 	if which update-initramfs >/dev/null 2>&1
 	then

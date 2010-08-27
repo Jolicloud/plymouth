@@ -30,7 +30,7 @@
 case "$1" in
     remove)
 	update-alternatives \
-		--remove default.plymouth /lib/plymouth/themes/ubuntu-logo/ubuntu-logo.plymouth
+		--remove text.plymouth /lib/plymouth/themes/jolicloud-text/jolicloud-text.plymouth
 
 	rmdir /lib/plymouth/themes || :
 	rmdir /lib/plymouth || :

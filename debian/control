@@ -8,7 +8,7 @@ Standards-Version: 3.8.3.0
 Package: plymouth
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libplymouth2 (= ${binary:Version}), libdrm-intel1 | libdrm-radeon1 | libdrm-nouveau1, udev (>= 149-2), mountall (>= 2.0), initramfs-tools
-Recommends: plymouth-theme-ubuntu-text | plymouth-theme
+Recommends: plymouth-theme-jolicloud-text | plymouth-theme
 Conflicts: usplash
 Breaks: gdm (<< 2.29.1-0ubuntu4), kdm (<< 4:4.4.2-0ubuntu6), ubuntustudio-plymouth-theme (<= 0.38), xubuntu-plymouth-theme (<< 10.04.4), lubuntu-plymouth-theme (<= 0.4)
 Description: graphical boot animation and logger - main package
@@ -143,17 +143,17 @@ Description: graphical boot animation and logger - spinfinity theme
  These theme may not correctly display messages from filesystem
  decryption, checking or error handling.
 
-Package: plymouth-theme-ubuntu-logo
+Package: plymouth-theme-jolicloud-logo
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, plymouth, plymouth-label
 Provides: plymouth-theme
 Replaces: plymouth (<< 0.8.1-1~)
-Description: graphical boot animation and logger - ubuntu-logo theme
+Description: graphical boot animation and logger - jolicloud-logo theme
  Plymouth is an application that runs very early in the boot process
  (even before the root filesystem is mounted!) that provides a graphical
  boot animation while the boot process happens in the background.
  .
- This package contains the default ubuntu-logo theme.
+ This package contains the default jolicloud-logo theme.
 
 Package: plymouth-theme-text
 Architecture: any
@@ -171,16 +171,16 @@ Description: graphical boot animation and logger - text theme
  These theme may not correctly display messages from filesystem
  decryption, checking or error handling.
 
-Package: plymouth-theme-ubuntu-text
+Package: plymouth-theme-jolicloud-text
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, plymouth
 Provides: plymouth-theme
 Replaces: plymouth (<< 0.8.1-1~)
-Description: graphical boot animation and logger - ubuntu-logo theme
+Description: graphical boot animation and logger - jolicloud-logo theme
  Plymouth is an application that runs very early in the boot process
  (even before the root filesystem is mounted!) that provides a graphical
  boot animation while the boot process happens in the background.
  .
- This package contains the default ubuntu-text text theme used when no
+ This package contains the default jolicloud-text text theme used when no
  support for a graphical theme is found on your system.
 

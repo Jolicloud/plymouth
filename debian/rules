@@ -33,7 +33,7 @@ override_dh_auto_configure:
 		--without-rhgb-compat-link \
 		--without-gdm-autostart-file \
 		--without-default-plugin   \
-		--with-logo=/lib/plymouth/ubuntu-logo.png \
+		--with-logo=/lib/plymouth/jolicloud-logo.png \
 		--with-background-color=0x2c001e \
 		--with-background-start-color-stop=0x2c001e \
 		--with-background-end-color-stop=0x2c001e \
