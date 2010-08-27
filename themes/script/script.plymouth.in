@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Script
+Description=Script plugin. not much here atm
+ModuleName=script
+
+[script]
+ImageDir=@PLYMOUTH_THEME_PATH@/script
+ScriptFile=@PLYMOUTH_THEME_PATH@/script/script.script
