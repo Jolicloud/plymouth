@@ -1,0 +1,4 @@
+[Plymouth Theme]
+Name=Ubuntu Text
+Description=Text mode theme based on ubuntu-logo theme
+ModuleName=ubuntu-text

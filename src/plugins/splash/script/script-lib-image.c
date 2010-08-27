@@ -171,7 +171,7 @@ static script_return_t image_text (script_state_t *state,
 
   alpha_obj = script_obj_hash_peek_element (state->local, "alpha");
 
-  if (alpha_obj)
+  if (alpha_obj && !script_obj_is_null(alpha_obj))
     {
       alpha = CLAMP(script_obj_as_number (alpha_obj), 0, 1);
       script_obj_unref(alpha_obj);
