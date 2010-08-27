@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Jolicloud Logo
+Description=A theme that features a blank background with a logo.
+ModuleName=script
+
+[script]
+ImageDir=@PLYMOUTH_THEME_PATH@/jolicloud-logo
+ScriptFile=@PLYMOUTH_THEME_PATH@/jolicloud-logo/jolicloud-logo.script
