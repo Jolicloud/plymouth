@@ -418,6 +418,8 @@ static void
 become_idle (ply_boot_splash_plugin_t *plugin,
              ply_trigger_t            *idle_trigger)
 {
+  stop_animation (plugin);
+
   ply_trigger_pull (idle_trigger, NULL);
 }
 

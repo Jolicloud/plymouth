@@ -54,6 +54,8 @@ typedef struct
 
   ply_pixel_buffer_t * (* get_buffer_for_head) (ply_renderer_backend_t *backend,
                                                 ply_renderer_head_t    *head);
+  unsigned int (* get_bits_per_pixel_for_head) (ply_renderer_backend_t *backend,
+                                                ply_renderer_head_t    *head);
 
   ply_renderer_input_source_t * (* get_input_source) (ply_renderer_backend_t *backend);
   bool                 (* open_input_source) (ply_renderer_backend_t *backend,

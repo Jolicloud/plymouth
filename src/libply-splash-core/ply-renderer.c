@@ -231,6 +231,7 @@ ply_renderer_open (ply_renderer_t *renderer)
       PLYMOUTH_PLUGIN_PATH "renderers/x11.so",
       PLYMOUTH_PLUGIN_PATH "renderers/drm.so",
       PLYMOUTH_PLUGIN_PATH "renderers/frame-buffer.so",
+      PLYMOUTH_PLUGIN_PATH "renderers/vga16fb.so",
       NULL
     };
 
@@ -308,6 +309,21 @@ ply_renderer_get_buffer_for_head (ply_renderer_t      *renderer,
 
   return renderer->plugin_interface->get_buffer_for_head (renderer->backend,
                                                           head);
+}
+
+unsigned int
+ply_renderer_get_bits_per_pixel_for_head (ply_renderer_t      *renderer,
+                                          ply_renderer_head_t *head)
+{
+  assert (renderer != NULL);
+  assert (renderer->plugin_interface != NULL);
+  assert (head != NULL);
+
+  if (!renderer->plugin_interface->get_bits_per_pixel_for_head)
+    return 0;
+
+  return renderer->plugin_interface->get_bits_per_pixel_for_head (renderer->backend,
+                                                                  head);
 }
 
 void

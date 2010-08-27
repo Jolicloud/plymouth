@@ -399,6 +399,45 @@ static script_return_t sprite_window_set_y (script_state_t *state,
   return script_return_obj_null ();
 }
 
+static script_return_t sprite_window_get_bits_per_pixel (script_state_t *state,
+                                                         void           *user_data)
+{
+  script_lib_sprite_data_t *data = user_data;
+  ply_list_node_t *node;
+  int index;
+  script_obj_t *index_obj;
+  script_lib_display_t *display;
+  unsigned int bits_per_pixel;
+
+  index_obj = script_obj_hash_peek_element (state->local, "window");
+
+  if (index_obj)
+    {
+      index = script_obj_as_number (index_obj);
+      script_obj_unref(index_obj);
+      if (index < 0)
+        return script_return_obj_null ();
+      node = ply_list_get_nth_node (data->displays, index);
+      if (node == NULL)
+        return script_return_obj_null ();
+      display = ply_list_node_get_data (node);
+      bits_per_pixel = ply_pixel_display_get_bits_per_pixel (display->pixel_display);
+      return script_return_obj (script_obj_new_number (bits_per_pixel));
+    }
+
+  bits_per_pixel = 0;
+  for (node = ply_list_get_first_node (data->displays);
+       node;
+       node = ply_list_get_next_node (data->displays, node))
+    {
+      display = ply_list_node_get_data (node);
+      bits_per_pixel = ply_pixel_display_get_bits_per_pixel (display->pixel_display);
+      if (bits_per_pixel)
+        break;
+    }
+  return script_return_obj (script_obj_new_number (bits_per_pixel));
+}
+
 static uint32_t extract_rgb_color (script_state_t *state)
 {
   uint8_t red =   CLAMP (255 * script_obj_hash_get_number (state->local, "red"),   0, 255);
@@ -649,6 +688,12 @@ script_lib_sprite_data_t *script_lib_sprite_setup (script_state_t *state,
                               data,
                               "window",
                               "value",
+                              NULL);
+  script_add_native_function (window_hash,
+                              "GetBitsPerPixel",
+                              sprite_window_get_bits_per_pixel,
+                              data,
+                              "window",
                               NULL);
   script_add_native_function (window_hash,
                               "SetBackgroundTopColor",
