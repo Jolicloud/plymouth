@@ -1,3 +1,14 @@
+plymouth (0.8.2-3jolicloud1+l2) robby-lucid; urgency=low
+
+  * Renamed ubuntu-logo/text to jolicloud-logo/text
+  * Applied debian/patches/debian-changes
+  * Created initial themes for jolicloud-logo, jolicloud-text
+  * Changed source format to "3.0 (git)"
+  * Cleanup of jolicloud theme input Makefiles
+  * Forked jolicloud-text.so from ubuntu-text.so
+
+ -- Adam McDaniel <adam@jolicloud.org>  Sun, 29 Aug 2010 21:46:56 -0600
+
 plymouth (0.8.2-2ubuntu2) lucid; urgency=low
 
   * Don't call ply_boot_client_process_pending_requests on flush, because
