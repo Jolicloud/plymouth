@@ -34,9 +34,9 @@ override_dh_auto_configure:
 		--without-gdm-autostart-file \
 		--without-default-plugin   \
 		--with-logo=/lib/plymouth/jolicloud-logo.png \
-		--with-background-color=0x2c001e \
-		--with-background-start-color-stop=0x2c001e \
-		--with-background-end-color-stop=0x2c001e \
+		--with-background-color=0x27282c \
+		--with-background-start-color-stop=0x27282c \
+		--with-background-end-color-stop=0x27282c \
 		--with-boot-tty=/dev/tty7 \
 		--with-shutdown-tty=/dev/tty7
 
