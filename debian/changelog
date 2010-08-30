@@ -1,3 +1,11 @@
+plymouth (0.8.2-3jolicloud2+l2) robby-lucid; urgency=low
+
+  * Adjusted default background colours
+  * Update the jolicloud-logo.png image to V1.0 revision
+  * Instruct initramfs-tools to use jolicloud-logo.jpg in initrd image
+
+ -- Adam McDaniel <adam@jolicloud.org>  Sun, 29 Aug 2010 22:23:27 -0600
+
 plymouth (0.8.2-3jolicloud1+l2) robby-lucid; urgency=low
 
   * Renamed ubuntu-logo/text to jolicloud-logo/text
