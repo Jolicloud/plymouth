@@ -271,6 +271,7 @@ AC_CONFIG_FILES([Makefile
            src/plugins/splash/Makefile
            src/plugins/splash/throbgress/Makefile
            src/plugins/splash/fade-throbber/Makefile
+           src/plugins/splash/jolicloud-text/Makefile
            src/plugins/splash/ubuntu-text/Makefile
            src/plugins/splash/text/Makefile
            src/plugins/splash/details/Makefile
