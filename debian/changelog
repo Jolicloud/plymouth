@@ -1,3 +1,11 @@
+plymouth (0.8.2-3jolicloud3+l2) robby-lucid; urgency=low
+
+  * Configure FRAMEBUFFER=y in initramfs-tools to start plymouth earlier
+    in the boot process.
+  * Added a simple moving cloud animation to jolicloud-logo theme
+
+ -- Adam McDaniel <adam@jolicloud.org>  Mon, 30 Aug 2010 18:15:18 -0600
+
 plymouth (0.8.2-3jolicloud2+l2) robby-lucid; urgency=low
 
   * Adjusted default background colours
