@@ -56,20 +56,68 @@ Window.SetBackgroundBottomColor (0.15, 0.16, 0.18);  # an equally nice colour on
 
 
 logo.image = Image ("jolicloud_logo.png");
+logobg.image = Image ("blue_background.png");
+for ( i = 0; i < 5; i++ ) {
+    image = Image ("cloud.png");
+    cloud[ i ].ratio = 0.2 * (i + 1);
+    width = image.GetWidth() * cloud[ i ].ratio;
+    height = image.GetHeight() * cloud[ i ].ratio;
+    cloud[ i ].image = image.Scale( width, height );
+}
+background.image = Image ("background.png");
 
-logo.sprite = Sprite ();
-logo.sprite.SetImage (logo.image);
+logo.sprite = Sprite( logo.image );
+logobg.sprite = Sprite( logobg.image );
+for ( i = 0; i < 5; i++ ) {
+    cloud[ i ].sprite = Sprite( cloud[ i ].image );
+    cloud[ i ].sprite.SetOpacity( cloud[ i ].ratio );
+    cloud[ i ].progress = 0;
+}
+#background.sprite = Sprite( background.image.Scale( Window.GetWidth(), Window.GetHeight() ) );
 
 logo.width = logo.image.GetWidth ();
 logo.height = logo.image.GetHeight ();
 logo.x = Window.GetWidth (0)  / 2 - logo.width  / 2;
-logo.y = 20;
+logo.y = 0;
 logo.z = 1000;
 logo.sprite.SetX (logo.x);
 # label_area_y = logo_area_y + (*label_height * 2) + 60;
 logo.sprite.SetY (logo.y);
-logo.sprite.SetY (logo.z);
+logo.sprite.SetZ (logo.z);
 logo.sprite.SetOpacity (1);
+
+
+logobg.width = logobg.image.GetWidth ();
+logobg.height = logobg.image.GetHeight ();
+logobg.x = Window.GetWidth (0)  / 2 - logobg.width  / 2;
+logobg.y = 0;
+logobg.z = 500;
+logobg.sprite.SetX (logobg.x);
+# label_area_y = logo_area_y + (*label_height * 2) + 60;
+logobg.sprite.SetY (logobg.y);
+logobg.sprite.SetZ (logobg.z);
+logobg.sprite.SetOpacity (1);
+
+for ( i = 0; i < 5; i++ )
+  cloud[ i ].y = Math.Int( Math.Random() * 100 );
+#cloud[ 0 ].y = 70;
+#cloud[ 1 ].y = 40;
+#cloud[ 2 ].y = 200;
+#cloud[ 3 ].y = 100;
+#cloud[ 4 ].y = 100;
+
+for ( i = 0; i < 5; i++ ) {
+    cloud[ i ].width = cloud[ i ].image.GetWidth ();
+    cloud[ i ].height = cloud[ i ].image.GetHeight ();
+    cloud[ i ].x = Window.GetWidth (0)  / 2 - cloud[ i ].width / 2 + 350;
+    cloud[ i ].z = 600;
+    cloud[ i ].origX = cloud[ i ].x;
+    cloud[ i ].origY = cloud[ i ].y;
+    cloud[ i ].origZ = cloud[ i ].z;
+    cloud[ i ].sprite.SetX( cloud[ i ].x );
+    cloud[ i ].sprite.SetY( cloud[ i ].y );
+    cloud[ i ].sprite.SetZ( cloud[ i ].z );
+}
 
 # Spacing below the logo - in pixels
 logo_spacing = 0;
@@ -678,10 +726,17 @@ Plymouth.SetUpdateStatusFunction (update_status_callback);
 #
 fun refresh_callback ()
 {
-    logo.sprite.SetX (logo.x);
-    logo.sprite.SetY (logo.y);
-    logo.sprite.SetZ (logo.z);
-    logo.sprite.SetOpacity (1);
+    for ( i = 0; i < 5; i++ ) {
+        cloud[ i ].progress++;
+        cloud[ i ].x -= Math.Int( cloud[ i ].progress * cloud[ i ].ratio / 10);
+        if ( ( cloud[ i ].origX - cloud[ i ].x ) > 700 ) {
+            cloud[ i ].x = cloud[ i ].origX;
+            cloud[ i ].progress = 0;
+            cloud[ i ].y = Math.Int( Math.Random() * 150 );
+            cloud[ i ].sprite.SetY( cloud[ i ].y );
+        }
+        cloud[ i ].sprite.SetX( cloud[ i ].x );
+    }
 }
 Plymouth.SetRefreshFunction (refresh_callback);
 
