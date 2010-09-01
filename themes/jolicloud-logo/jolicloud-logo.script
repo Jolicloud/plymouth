@@ -469,47 +469,47 @@ init_queue ();
 
 #----------------------------------------- Progress Bar --------------------------------
 
-progress_box.image = Image("progress_box.png");
-progress_box.sprite = Sprite(progress_box.image);
-
-progress_box.x = Window.GetWidth()  / 2 -    progress_box.image.GetWidth()  / 2;
-progress_box.y = logo.y + logo.height + 20;
-progress_box.sprite.SetPosition(progress_box.x, progress_box.y, 0);
-
-progress_left.image = Image("progress_left.png");
-progress_left.sprite = Sprite(progress_left.image);
-
-progress_left.x = Window.GetWidth()  / 2 -       progress_box.image.GetWidth()  / 2;
-progress_left.y = logo.y + logo.height + 20;
-progress_left.sprite.SetPosition(progress_left.x, progress_left.y, 1);
-
-progress_bar.original_image = Image("progress_bar.png");
-progress_bar.sprite = Sprite();
-
-progress_bar.x = Window.GetWidth()  / 2 -        progress_bar.original_image.GetWidth() / 2;
-progress_bar.y = logo.y + logo.height + 20;
-progress_bar.sprite.SetPosition(progress_bar.x, progress_bar.y, 1);
-
-progress_right.image = Image("progress_right.png");
-progress_right.sprite = Sprite();
-
-progress_right.x = Window.GetWidth()  / 2 -        progress_bar.original_image.GetWidth() / 2;
-progress_right.y = logo.y + logo.height + 20;
-progress_right.sprite.SetPosition(progress_right.x, progress_right.y, 1);
-
-fun progress_callback (duration, progress)
-  {
-    if (progress_bar.image.GetWidth () != Math.Int (progress_bar.original_image.GetWidth () * progress))
-      {
-        progress_bar.image = progress_bar.original_image.Scale(progress_bar.original_image.GetWidth(progress_bar.original_image) * progress, progress_bar.original_image.GetHeight());
-        progress_bar.sprite.SetImage (progress_bar.image);
-	progress_right.x = Window.GetWidth()  / 2  - progress_box.image.GetWidth()  / 2 + progress_bar.original_image.GetWidth(progress_bar.original_image) * progress + 15;
-progress_right.sprite.SetPosition(progress_right.x, progress_right.y, 1);
-	progress_right.sprite.SetImage (progress_right.image);
-      }
-  }
-
-Plymouth.SetBootProgressFunction(progress_callback);
+#progress_box.image = Image("progress_box.png");
+#progress_box.sprite = Sprite(progress_box.image);
+#
+#progress_box.x = Window.GetWidth()  / 2 -    progress_box.image.GetWidth()  / 2;
+#progress_box.y = logo.y + logo.height + 20;
+#progress_box.sprite.SetPosition(progress_box.x, progress_box.y, 0);
+#
+#progress_left.image = Image("progress_left.png");
+#progress_left.sprite = Sprite(progress_left.image);
+#
+#progress_left.x = Window.GetWidth()  / 2 -       progress_box.image.GetWidth()  / 2;
+#progress_left.y = logo.y + logo.height + 20;
+#progress_left.sprite.SetPosition(progress_left.x, progress_left.y, 1);
+#
+#progress_bar.original_image = Image("progress_bar.png");
+#progress_bar.sprite = Sprite();
+#
+#progress_bar.x = Window.GetWidth()  / 2 -        progress_bar.original_image.GetWidth() / 2;
+#progress_bar.y = logo.y + logo.height + 20;
+#progress_bar.sprite.SetPosition(progress_bar.x, progress_bar.y, 1);
+#
+#progress_right.image = Image("progress_right.png");
+#progress_right.sprite = Sprite();
+#
+#progress_right.x = Window.GetWidth()  / 2 -        progress_bar.original_image.GetWidth() / 2;
+#progress_right.y = logo.y + logo.height + 20;
+#progress_right.sprite.SetPosition(progress_right.x, progress_right.y, 1);
+#
+#fun progress_callback (duration, progress)
+#  {
+#    if (progress_bar.image.GetWidth () != Math.Int (progress_bar.original_image.GetWidth () * progress))
+#      {
+#        progress_bar.image = progress_bar.original_image.Scale(progress_bar.original_image.GetWidth(progress_bar.original_image) * progress, progress_bar.original_image.GetHeight());
+#        progress_bar.sprite.SetImage (progress_bar.image);
+#	progress_right.x = Window.GetWidth()  / 2  - progress_box.image.GetWidth()  / 2 + progress_bar.original_image.GetWidth(progress_bar.original_image) * progress + 15;
+#progress_right.sprite.SetPosition(progress_right.x, progress_right.y, 1);
+#	progress_right.sprite.SetImage (progress_right.image);
+#      }
+#  }
+#
+#Plymouth.SetBootProgressFunction(progress_callback);
 
 
 #-----------------------------------------Fsck stuff -----------------------------
