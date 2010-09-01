@@ -1,3 +1,13 @@
+plymouth (0.8.2-3jolicloud4+l2) robby-lucid; urgency=low
+
+  * Added in missing jolicloud-logo images.
+  * Cleaned up jolicloud-logo.script code
+  * Disabled the progress_bar on jolicloud-logo
+  * Centred the jolicloud image, removed the unnecessary background
+    graphic.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Wed, 01 Sep 2010 13:56:03 -0600
+
 plymouth (0.8.2-3jolicloud3+l2) robby-lucid; urgency=low
 
   * Configure FRAMEBUFFER=y in initramfs-tools to start plymouth earlier
