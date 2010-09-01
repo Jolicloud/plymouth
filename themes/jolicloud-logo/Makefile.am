@@ -3,7 +3,6 @@ nodist_theme_DATA = jolicloud-logo.plymouth
 dist_theme_DATA =   jolicloud-logo.script                                \
                     jolicloud_logo.png                                   \
                     cloud.png                                            \
-                    background.png                                       \
                     blue_background.png                                  \
                     box.png                                              \
                     bullet.png                                           \

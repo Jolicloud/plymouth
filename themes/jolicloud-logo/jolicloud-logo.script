@@ -51,13 +51,12 @@ fun DebugMedium(text) {
     debugsprite_medium.SetPosition(0, (Window.GetHeight (0) - 60), 1);
 }
 
-#Window.SetBackgroundTopColor (0.15, 0.16, 0.18);     # Nice colour on top of the screen fading to
-#Window.SetBackgroundBottomColor (0.15, 0.16, 0.18);  # an equally nice colour on the bottom
+Window.SetBackgroundTopColor (0.15, 0.16, 0.18);     # Nice colour on top of the screen fading to
+Window.SetBackgroundBottomColor (0.15, 0.16, 0.18);  # an equally nice colour on the bottom
 
 
 logo.image = Image ("jolicloud_logo.png");
 logobg.image = Image ("blue_background.png");
-background.image = Image ("background.png");
 
 for ( i = 0; i < 5; i++ ) {
     image = Image ("cloud.png");
@@ -67,13 +66,10 @@ for ( i = 0; i < 5; i++ ) {
     cloud[ i ].image = image.Scale( width, height );
 }
 
-background.sprite = Sprite( background.image.Scale( Window.GetWidth(), Window.GetHeight() ) );
-background.sprite.SetZ( 0 );
-
 logo.width = logo.image.GetWidth ();
 logo.height = logo.image.GetHeight ();
 logo.x = Window.GetWidth (0)  / 2 - logo.width  / 2;
-logo.y = 0;
+logo.y = Window.GetHeight (0)  / 2 - logo.height  / 2;
 logo.z = 1000;
 logo.sprite = Sprite( logo.image );
 logo.sprite.SetX (logo.x);
@@ -85,7 +81,7 @@ logo.sprite.SetOpacity (1);
 logobg.width = logobg.image.GetWidth ();
 logobg.height = logobg.image.GetHeight ();
 logobg.x = Window.GetWidth (0)  / 2 - logobg.width  / 2;
-logobg.y = 0;
+logobg.y = logo.y;
 logobg.z = 500;
 logobg.sprite = Sprite( logobg.image );
 logobg.sprite.SetX (logobg.x);
@@ -98,7 +94,7 @@ for ( i = 0; i < 5; i++ ) {
     cloud[ i ].width = cloud[ i ].image.GetWidth ();
     cloud[ i ].height = cloud[ i ].image.GetHeight ();
     cloud[ i ].x = Window.GetWidth (0)  / 2 - cloud[ i ].width / 2 + 350;
-    cloud[ i ].y = Math.Int( Math.Random() * 100 );
+    cloud[ i ].y = Math.Int( Math.Random() * 100 ) + logo.y;
     cloud[ i ].z = 600;
     cloud[ i ].origX = cloud[ i ].x;
     cloud[ i ].origY = cloud[ i ].y;
@@ -723,7 +719,7 @@ fun refresh_callback ()
         if ( ( cloud[ i ].origX - cloud[ i ].x ) > 700 ) {
             cloud[ i ].x = cloud[ i ].origX;
             cloud[ i ].progress = 0;
-            cloud[ i ].y = Math.Int( Math.Random() * 150 );
+            cloud[ i ].y = Math.Int( Math.Random() * 100 ) + logo.y;
             cloud[ i ].sprite.SetY( cloud[ i ].y );
         }
         cloud[ i ].sprite.SetX( cloud[ i ].x );
