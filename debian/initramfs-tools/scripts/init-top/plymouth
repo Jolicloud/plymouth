@@ -15,6 +15,6 @@ prereqs)
         ;;
 esac
 
-printf '\033[?25l' > /dev/tty7
+printf '\033[?25l' > /dev/tty6
 /sbin/plymouthd --mode=boot --attach-to-session --pid-file=/dev/.initramfs/plymouth.pid
 /bin/plymouth show-splash
