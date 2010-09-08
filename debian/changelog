@@ -1,3 +1,15 @@
+plymouth (0.8.2-3jolicloud5+l2) robby-lucid; urgency=low
+
+  [ Romain Huet ]
+  * Improve the Jolicloud theme images
+
+  [ Adam McDaniel ]
+  * Use tty6 as the default boot/shutdown TTY
+  * Resized default jolicloud-logo.png to 200x174
+  * Corrected the background colour of the jolicloud-text splash plugin
+
+ -- Adam McDaniel <adam@jolicloud.org>  Tue, 07 Sep 2010 23:57:55 -0600
+
 plymouth (0.8.2-3jolicloud4+l2) robby-lucid; urgency=low
 
   * Added in missing jolicloud-logo images.
