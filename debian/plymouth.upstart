@@ -12,7 +12,8 @@ start on (starting mountall
               and (stopped gdm
                    or stopped kdm
                    or stopped xdm
-                   or stopped lxdm)))
+                   or stopped lxdm
+                   or stopped slim)))
 
 expect fork
 kill timeout 60

@@ -9,6 +9,7 @@ start on (starting gdm
           or starting kdm
           or starting xdm
           or starting lxdm
+          or starting slim
           or starting ubiquity
           or starting oem-config
           or stopped rc RUNLEVEL=[2345]
