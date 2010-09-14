@@ -1,3 +1,13 @@
+plymouth (0.8.2-3jolicloud6+l2) robby-lucid; urgency=low
+
+  [ Romain Huet ]
+  * Update the Jolicloud theme images
+
+  [ Adam McDaniel ]
+  * Added upstart rules to treat slim like gdm
+
+ -- Adam McDaniel <adam@jolicloud.org>  Tue, 14 Sep 2010 15:28:58 -0600
+
 plymouth (0.8.2-3jolicloud5+l2) robby-lucid; urgency=low
 
   [ Romain Huet ]
