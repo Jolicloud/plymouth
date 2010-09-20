@@ -21,7 +21,9 @@
  */
 #include "config.h"
 
+#include <sys/resource.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <limits.h>
 #include <dirent.h>
@@ -1907,6 +1909,8 @@ main (int    argc,
 
   signal (SIGABRT, on_crash);
   signal (SIGSEGV, on_crash);
+
+  setpriority (PRIO_PROCESS, 0, -10);
 
   /* If we're shutting down we don't want to die until killed
    */
