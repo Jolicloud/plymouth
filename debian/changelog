@@ -1,3 +1,11 @@
+plymouth (0.8.2-3jolicloud7+l2) robby-lucid; urgency=low
+
+  * Set niceness of -10, this should help any animation stuttering
+  * Updated upstart scripts to minimize "linux lines"
+  * Use boot tty7, shutdown tty2
+
+ -- Adam McDaniel <adam@jolicloud.org>  Tue, 21 Sep 2010 02:52:09 -0600
+
 plymouth (0.8.2-3jolicloud6+l2) robby-lucid; urgency=low
 
   [ Romain Huet ]
