@@ -37,8 +37,8 @@ override_dh_auto_configure:
 		--with-background-color=0x27282c \
 		--with-background-start-color-stop=0x27282c \
 		--with-background-end-color-stop=0x27282c \
-		--with-boot-tty=/dev/tty6 \
-		--with-shutdown-tty=/dev/tty6
+		--with-boot-tty=/dev/tty7 \
+		--with-shutdown-tty=/dev/tty2
 
 override_dh_auto_install:
 	dh_auto_install
