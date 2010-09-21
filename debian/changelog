@@ -1,3 +1,9 @@
+plymouth (0.8.2-3jolicloud8+l2) robby-lucid; urgency=low
+
+  * Rebuild against lucid's DRM
+
+ -- Adam McDaniel <adam@jolicloud.org>  Tue, 21 Sep 2010 10:42:26 -0600
+
 plymouth (0.8.2-3jolicloud7+l2) robby-lucid; urgency=low
 
   * Set niceness of -10, this should help any animation stuttering
