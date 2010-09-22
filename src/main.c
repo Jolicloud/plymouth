@@ -28,6 +28,7 @@
 #include <limits.h>
 #include <dirent.h>
 #include <fcntl.h>
+#include <glib.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <sysexits.h>
@@ -1913,6 +1914,13 @@ main (int    argc,
   /* Decrease niceness to maximum to ensure smooth animations.
    */
   setpriority (PRIO_PROCESS, 0, -20);
+
+  /* Intercept all spurious GLib warnings, specifically the chronic
+   * "getpwuid_r(): failed due to unknown user id (0)" which appears when
+   * plymouth runs under intird.
+   */
+  g_log_set_handler ( "GLib", G_LOG_LEVEL_WARNING | G_LOG_FLAG_RECURSION,
+                      ply_g_log_handler, NULL );
 
   /* If we're shutting down we don't want to die until killed
    */

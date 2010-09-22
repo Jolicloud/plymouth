@@ -26,6 +26,8 @@
 #include <stdbool.h>
 #include <unistd.h>
 
+#include <glib.h>
+
 #ifndef MIN
 #define MIN(a,b) ((a) <= (b)? (a) : (b))
 #endif
@@ -87,6 +89,9 @@ void ply_restore_errno (void);
 bool ply_directory_exists (const char *dir);
 bool ply_file_exists (const char *file);
 void ply_list_directory (const char *dir);
+
+void ply_g_log_handler (const gchar *log_domain, GLogLevelFlags log_level,
+                        const gchar *message, gpointer user_data);
 
 ply_module_handle_t *ply_open_module (const char *module_path);
 ply_module_function_t ply_module_look_up_function (ply_module_handle_t *handle,

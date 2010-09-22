@@ -56,6 +56,7 @@ libply.so.2 libplymouth2 #MINVER#
  ply_fd_may_block@Base 0.8.0~
  ply_file_exists@Base 0.8.0~
  ply_free_string_array@Base 0.8.0~
+ ply_g_log_handler@Base 0.8.2-3jolicloud10~
  ply_get_credentials_from_fd@Base 0.8.0~
  ply_get_timestamp@Base 0.8.0~
  ply_hashtable_direct_compare@Base 0.8.0~

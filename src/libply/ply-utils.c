@@ -670,6 +670,12 @@ ply_list_directory (const char *path)
   closedir (dir);
 }
 
+void
+ply_g_log_handler (const gchar *log_domain, GLogLevelFlags log_level,
+                   const gchar *message, gpointer user_data)
+{
+}
+
 ply_module_handle_t *
 ply_open_module (const char *module_path)
 {
