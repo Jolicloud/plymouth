@@ -1,3 +1,9 @@
+plymouth (0.8.2-3jolicloud9+l2) robby-lucid; urgency=low
+
+  * Disable the X11 and DRM renderers, rely only on FB and VGA.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Wed, 22 Sep 2010 00:51:34 -0600
+
 plymouth (0.8.2-3jolicloud8+l2) robby-lucid; urgency=low
 
   * Rebuild against lucid's DRM
