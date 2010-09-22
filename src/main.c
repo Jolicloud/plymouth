@@ -1910,7 +1910,9 @@ main (int    argc,
   signal (SIGABRT, on_crash);
   signal (SIGSEGV, on_crash);
 
-  setpriority (PRIO_PROCESS, 0, -10);
+  /* Decrease niceness to maximum to ensure smooth animations.
+   */
+  setpriority (PRIO_PROCESS, 0, -20);
 
   /* If we're shutting down we don't want to die until killed
    */
