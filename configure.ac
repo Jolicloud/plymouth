@@ -37,8 +37,8 @@ PKG_CHECK_MODULES(IMAGE, [libpng >= 1.2.16 ])
 AC_SUBST(IMAGE_CFLAGS)
 AC_SUBST(IMAGE_LIBS)
 
-PLYMOUTH_CFLAGS=""
-PLYMOUTH_LIBS="-lm -lrt -ldl"
+PLYMOUTH_CFLAGS="-I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include"
+PLYMOUTH_LIBS="-lm -lrt -ldl -lglib-2.0"
 
 AC_SUBST(PLYMOUTH_CFLAGS)
 AC_SUBST(PLYMOUTH_LIBS)

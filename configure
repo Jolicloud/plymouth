@@ -11706,8 +11706,8 @@ fi
 
 
 
-PLYMOUTH_CFLAGS=""
-PLYMOUTH_LIBS="-lm -lrt -ldl"
+PLYMOUTH_CFLAGS="-I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include"
+PLYMOUTH_LIBS="-lm -lrt -ldl -lglib-2.0"
 
 
 
