@@ -1,3 +1,15 @@
+plymouth (0.8.2-3jolicloud10+l2) robby-lucid; urgency=low
+
+  * Decrease niceness to -20 for smoother animations
+  * Instruct git to ignore autom4te.cache/
+  * Inhibit building of default example themes
+  * Depend on glib-2.0 across the entire project
+  * Wrap all G_LOG_LEVEL_WARNING messages in ply_g_log_handler(); this
+    should silence spurious glib warnings when ran under initrd
+  * Now that tty7 is 100% clean on bootup, use it for shutdown too.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Wed, 22 Sep 2010 18:33:17 -0600
+
 plymouth (0.8.2-3jolicloud9+l2) robby-lucid; urgency=low
 
   * Disable the X11 and DRM renderers, rely only on FB and VGA.
