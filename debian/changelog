@@ -1,3 +1,10 @@
+plymouth (0.8.2-3jolicloud11+l2) robby-lucid; urgency=low
+
+  * Removed default plymouth upstart script; shutdown now handled by
+    slim directly
+
+ -- Adam McDaniel <adam@jolicloud.org>  Thu, 23 Sep 2010 01:19:08 -0600
+
 plymouth (0.8.2-3jolicloud10+l2) robby-lucid; urgency=low
 
   * Decrease niceness to -20 for smoother animations
