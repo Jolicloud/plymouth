@@ -1,3 +1,11 @@
+plymouth (0.8.2-3jolicloud12+l2) robby-lucid; urgency=low
+
+  * Revert "Removed default plymouth upstart script; shutdown now
+    handled by slim directly" Discovered that slim is busted; need to fall
+    back to earlier functionality, and debug it more after some sleep.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Thu, 23 Sep 2010 03:39:45 -0600
+
 plymouth (0.8.2-3jolicloud11+l2) robby-lucid; urgency=low
 
   * Removed default plymouth upstart script; shutdown now handled by
