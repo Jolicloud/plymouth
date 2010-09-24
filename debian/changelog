@@ -1,3 +1,10 @@
+plymouth (0.8.2-3jolicloud13+l2) robby-lucid; urgency=low
+
+  [ Romain Huet ]
+  * Improve the Jolicloud illustration quality
+
+ -- Adam McDaniel <adam@jolicloud.org>  Fri, 24 Sep 2010 04:20:35 -0600
+
 plymouth (0.8.2-3jolicloud12+l2) robby-lucid; urgency=low
 
   * Revert "Removed default plymouth upstart script; shutdown now
