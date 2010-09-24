@@ -787,7 +787,16 @@ static void
 on_hide_splash_request (state_t    *state,
                         const char *command)
 {
+    bool should_retain_tty;
+
+    should_retain_tty = false;
+    ply_command_parser_get_command_options (state->command_parser,
+                                            command,
+                                            "retain-tty", &should_retain_tty,
+                                            NULL);
+
     ply_boot_client_tell_daemon_to_hide_splash (state->client,
+                                               should_retain_tty,
                                                (ply_boot_client_response_handler_t)
                                                on_success,
                                                (ply_boot_client_response_handler_t)
@@ -881,7 +890,8 @@ main (int    argc,
                                   "hide-splash", "Tell daemon to hide splash screen",
                                   (ply_command_handler_t)
                                   on_hide_splash_request, &state,
-                                  NULL);
+                                  "retain-tty", "Don't explicitly change boot splash tty on hide",
+                                  PLY_COMMAND_OPTION_TYPE_FLAG, NULL);
 
   ply_command_parser_add_command (state.command_parser,
                                   "ask-for-password", "Ask user for password",
@@ -1052,6 +1062,7 @@ main (int    argc,
                                                on_failure, &state);
   else if (should_hide_splash)
     ply_boot_client_tell_daemon_to_hide_splash (state.client,
+                                               false,
                                                (ply_boot_client_response_handler_t)
                                                on_success,
                                                (ply_boot_client_response_handler_t)

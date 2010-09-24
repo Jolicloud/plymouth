@@ -381,9 +381,16 @@ ply_boot_connection_on_request (ply_boot_connection_t *connection)
     }
   else if (strcmp (command, PLY_BOOT_PROTOCOL_REQUEST_TYPE_HIDE_SPLASH) == 0)
     {
-      ply_trace ("got hide splash request");
+      bool retain_tty;
+
+      retain_tty = (bool) argument[0];
+
+      ply_trace ("got hide-splash %srequest", retain_tty? "--retain-tty " : "");
+
       if (server->hide_splash_handler != NULL)
-        server->hide_splash_handler (server->user_data, server);
+        server->hide_splash_handler (server->user_data, retain_tty, server);
+
+      free(argument);
     }
   else if (strcmp (command, PLY_BOOT_PROTOCOL_REQUEST_TYPE_DEACTIVATE) == 0)
     {

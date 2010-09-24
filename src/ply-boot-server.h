@@ -44,6 +44,7 @@ typedef void (* ply_boot_server_show_splash_handler_t) (void              *user_
                                                         ply_boot_server_t *server);
 
 typedef void (* ply_boot_server_hide_splash_handler_t) (void              *user_data,
+                                                        bool               retain_tty,
                                                         ply_boot_server_t *server);
 
 typedef void (* ply_boot_server_password_answer_handler_t) (void              *answer_data,

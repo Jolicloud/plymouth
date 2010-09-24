@@ -810,7 +810,8 @@ dump_details_and_quit_splash (state_t *state)
 }
 
 static void
-on_hide_splash (state_t *state)
+on_hide_splash (state_t *state,
+                bool     retain_tty)
 {
   if (state->is_inactive)
     return;
@@ -818,7 +819,8 @@ on_hide_splash (state_t *state)
   if (state->boot_splash == NULL)
     return;
 
-  ply_trace ("hiding boot splash");
+  state->should_retain_splash = retain_tty;
+
   dump_details_and_quit_splash (state);
 }
 
