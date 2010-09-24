@@ -1,3 +1,12 @@
+plymouth (0.8.2-3jolicloud14+l2) robby-lucid; urgency=low
+
+  * Removed default plymouth upstart script; shutdown now handled by
+    slim directly
+  * Added "--retain-tty" option to hide-splash command: ease slim
+    integration
+
+ -- Adam McDaniel <adam@jolicloud.org>  Fri, 24 Sep 2010 07:19:39 -0600
+
 plymouth (0.8.2-3jolicloud13+l2) robby-lucid; urgency=low
 
   [ Romain Huet ]
