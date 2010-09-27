@@ -9,6 +9,6 @@ description	"Userspace bootsplash utility"
 
 start on (runlevel [!2345])
 
-expect fork
+task
 
 exec /bin/plymouth show-splash

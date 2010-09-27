@@ -12,7 +12,7 @@ start on (starting gdm
           or starting slim
           or starting ubiquity
           or starting oem-config
-          or stopped rc RUNLEVEL=[2345]
+#          or stopped rc RUNLEVEL=[2345]
           or starting rcS
           or starting mountall-shell)
 stop on stopped plymouth

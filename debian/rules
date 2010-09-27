@@ -58,8 +58,14 @@ override_dh_auto_clean:
 override_dh_installinit:
 	dh_installinit --noscripts
 	dh_installinit --name=plymouth-log --noscripts
+	dh_installinit --name=plymouth-shutdown --noscripts
 	dh_installinit --name=plymouth-splash --noscripts
 	dh_installinit --name=plymouth-stop --noscripts
+
+# Do not treat the upstart scripts as conffiles: ensures proper upgradability
+override_dh_installdeb:
+	dh_installdeb
+	rm -f debian/plymouth/DEBIAN/conffiles
 
 # Make the initramfs scripts executable
 override_dh_fixperms:
