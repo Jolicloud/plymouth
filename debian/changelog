@@ -1,3 +1,12 @@
+plymouth (0.8.2-3jolicloud15+l2) robby-lucid; urgency=low
+
+  * Force all /etc/init/* scripts to be updated; inhibit
+    DEBIAN/conffiles
+  * Create a plymouth-wrapper script to work with upstart to ensure
+    plymouthd is always running.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Sun, 26 Sep 2010 23:24:46 -0600
+
 plymouth (0.8.2-3jolicloud14+l2) robby-lucid; urgency=low
 
   * Removed default plymouth upstart script; shutdown now handled by
