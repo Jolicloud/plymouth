@@ -301,6 +301,7 @@ AC_CONFIG_FILES([Makefile
 	   scripts/plymouth-generate-initrd
 	   scripts/plymouth-populate-initrd
 	   scripts/plymouth-set-default-theme
+	   scripts/plymouth-wrapper
            scripts/Makefile
            docs/Makefile
 ])

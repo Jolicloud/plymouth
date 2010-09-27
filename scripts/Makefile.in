@@ -38,7 +38,8 @@ subdir = scripts
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/plymouth-generate-initrd.in \
 	$(srcdir)/plymouth-populate-initrd.in \
-	$(srcdir)/plymouth-set-default-theme.in
+	$(srcdir)/plymouth-set-default-theme.in \
+	$(srcdir)/plymouth-wrapper.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.ac
@@ -47,7 +48,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES = plymouth-generate-initrd plymouth-populate-initrd \
-	plymouth-set-default-theme
+	plymouth-set-default-theme plymouth-wrapper
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -228,11 +229,12 @@ noinst_SCRIPTS = new-object.sh
 initrdscriptdir = $(libexecdir)/plymouth
 initrdscript_SCRIPTS = plymouth-update-initrd plymouth-generate-initrd plymouth-populate-initrd
 sbinscriptsdir = $(sbindir)
-sbinscripts_SCRIPTS = plymouth-set-default-theme
+sbinscripts_SCRIPTS = plymouth-set-default-theme plymouth-wrapper
 EXTRA_DIST = plymouth-update-initrd                                             \
 	    plymouth-generate-initrd.in                                        \
 	    plymouth-populate-initrd.in                                        \
 	    plymouth-set-default-theme.in                                     \
+	    plymouth-wrapper.in                                     \
 	    $(noinst_SCRIPTS)                                                  \
 	    default.cfg
 
@@ -274,6 +276,8 @@ plymouth-generate-initrd: $(top_builddir)/config.status $(srcdir)/plymouth-gener
 plymouth-populate-initrd: $(top_builddir)/config.status $(srcdir)/plymouth-populate-initrd.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 plymouth-set-default-theme: $(top_builddir)/config.status $(srcdir)/plymouth-set-default-theme.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+plymouth-wrapper: $(top_builddir)/config.status $(srcdir)/plymouth-wrapper.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 install-initrdscriptSCRIPTS: $(initrdscript_SCRIPTS)
 	@$(NORMAL_INSTALL)

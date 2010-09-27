@@ -1,0 +1,23 @@
+# plymouth - Userspace bootsplash utility
+#
+# plymouth provides a boot splash screen on the system console using
+# the kernel framebuffer device.  On boot, this is nominally started by
+# the initramfs so the pre-start script, script and post-start script
+# parts are actually not run.  These are normally run on shutdown instead.
+
+description	"Userspace bootsplash utility"
+
+start on runlevel [023456]
+stop on runlevel [1]
+
+expect fork
+
+instance shutdown
+
+script
+    exec /usr/sbin/plymouth-wrapper shutdown
+end script
+
+post-stop script
+    /bin/plymouth quit || .
+end script

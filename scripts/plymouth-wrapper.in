@@ -1,0 +1,17 @@
+#!/usr/bin/perl
+
+my $child = fork();
+
+my $mode = $ARGV[ 0 ] || 'shutdown';
+
+if ( $child == 0 ) {
+    while ( 1 ) {
+        system( '@plymouthclientdir@/plymouth', '--ping' );
+        if ( $? eq 0 ) {
+            sleep 1;
+        }
+        else {
+            system( '@plymouthdaemondir@/plymouthd', '--mode=' . $mode, '--no-daemon' );
+        }
+    }
+}
