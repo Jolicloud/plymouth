@@ -11,4 +11,11 @@ start on (runlevel [!2345])
 
 task
 
-exec /bin/plymouth show-splash
+script
+    if [ "$RUNLEVEL" = "0" ]; then
+        /bin/plymouth message --text="Shutting down..."
+    elif [ "$RUNLEVEL" = "6" ]; then
+        /bin/plymouth message --text="Rebooting..."
+    fi
+    exec /bin/plymouth show-splash
+end script
