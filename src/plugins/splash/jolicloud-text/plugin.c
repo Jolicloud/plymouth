@@ -424,7 +424,7 @@ animate_frame (ply_boot_splash_plugin_t *plugin,
 
       ply_text_display_set_background_color (view->display, PLY_TERMINAL_COLOR_BLACK);
       ply_text_display_set_foreground_color (view->display, PLY_TERMINAL_COLOR_WHITE);
-      ply_text_display_write (view->display, "Jolicloud V1.1");
+      ply_text_display_write (view->display, "Jolicloud 1.1");
 
       ply_text_display_set_cursor_position (view->display,
                                             (display_width - 10) / 2,
