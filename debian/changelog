@@ -1,3 +1,12 @@
+plymouth (0.8.2-3jolicloud16+l2) robby; urgency=low
+
+  * Add simple "Shutting down..." and "Rebooting..." messages to
+    plymouth-shutdown upstart script
+  * Re-enable DRM renderer
+  * Set text-mode boot title to "Jolicloud 1.1"
+
+ -- Adam McDaniel <adam@jolicloud.org>  Mon, 18 Oct 2010 21:08:39 -0600
+
 plymouth (0.8.2-3jolicloud15+l2) robby-lucid; urgency=low
 
   * Force all /etc/init/* scripts to be updated; inhibit
