@@ -1,3 +1,10 @@
+plymouth (0.8.2-3jolicloud16.1+l2) robby; urgency=low
+
+  [ Jérémy Bethmont ]
+  * Added a warning message for Preview release.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Thu, 21 Oct 2010 11:13:09 -0600
+
 plymouth (0.8.2-3jolicloud16+l2) robby; urgency=low
 
   * Add simple "Shutting down..." and "Rebooting..." messages to
