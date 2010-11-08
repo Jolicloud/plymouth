@@ -54,12 +54,23 @@ fun DebugMedium(text) {
 Window.SetBackgroundTopColor (0.15, 0.16, 0.18);     # Nice colour on top of the screen fading to
 Window.SetBackgroundBottomColor (0.15, 0.16, 0.18);  # an equally nice colour on the bottom
 
+aspect = Math.Int( Window.GetWidth() / Window.GetHeight() * 100 ) / 100;
 
-logo.image = Image ("jolicloud_logo.png");
+if ( aspect < 1.6 ) {
+    logo.image = Image( "jolicloud_logo-stretch.png" );
+}
+else {
+    logo.image = Image ("jolicloud_logo.png");
+}
 logobg.image = Image ("blue_background.png");
 
 for ( i = 0; i < 5; i++ ) {
-    image = Image ("cloud.png");
+    if ( aspect < 1.6 ) {
+        image = Image ("cloud-stretch.png");
+    }
+    else {
+        image = Image ("cloud.png");
+    }
     cloud[ i ].ratio = 0.2 * (i + 1);
     width = image.GetWidth() * cloud[ i ].ratio;
     height = image.GetHeight() * cloud[ i ].ratio;
