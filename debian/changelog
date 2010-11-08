@@ -1,3 +1,11 @@
+plymouth (0.8.2-3jolicloud17+l2) robby; urgency=low
+
+  * Use a stretched logo if the screen aspect ratio is less than 16:10.
+    (FIXME: Use the physical screen's dimensions, not the framebuffer's
+    dimensions.)
+
+ -- Adam McDaniel <adam@jolicloud.org>  Mon, 08 Nov 2010 13:07:28 +0100
+
 plymouth (0.8.2-3jolicloud16.1+l2) robby; urgency=low
 
   [ Jérémy Bethmont ]
