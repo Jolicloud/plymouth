@@ -18,4 +18,3 @@ esac
 printf '\033[?25l' > /dev/tty7
 /sbin/plymouthd --mode=boot --attach-to-session --pid-file=/dev/.initramfs/plymouth.pid
 /bin/plymouth show-splash
-/bin/plymouth message --text="Preview release #1 - For testing purposes only"
