@@ -1,3 +1,10 @@
+plymouth (0.8.2-3jolicloud18+l2) robby; urgency=low
+
+  [ Jérémy Bethmont ]
+  * Revert "Added a warning message for Preview release."
+
+ -- Adam McDaniel <adam@jolicloud.org>  Wed, 01 Dec 2010 16:02:36 +0100
+
 plymouth (0.8.2-3jolicloud17+l2) robby; urgency=low
 
   * Use a stretched logo if the screen aspect ratio is less than 16:10.
