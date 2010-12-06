@@ -1,3 +1,11 @@
+plymouth (0.8.2-3jolicloud19+l2) robby; urgency=low
+
+  [ Romain Huet ]
+  * Update the Jolicloud theme illustration to remove the legacy
+    baseline
+
+ -- Adam McDaniel <adam@jolicloud.org>  Mon, 06 Dec 2010 02:56:34 -0700
+
 plymouth (0.8.2-3jolicloud18+l2) robby; urgency=low
 
   [ Jérémy Bethmont ]
