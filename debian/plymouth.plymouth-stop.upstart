@@ -10,6 +10,7 @@ start on (starting gdm
           or starting xdm
           or starting lxdm
           or starting slim
+          or starting jolicloud-displaymanager
           or starting ubiquity
           or starting oem-config
 #          or stopped rc RUNLEVEL=[2345]
@@ -19,7 +20,7 @@ stop on stopped plymouth
 
 pre-start script
     case "$JOB" in
-    gdm|kdm|ubiquity|slim|oem-config)
+    gdm|kdm|ubiquity|slim|jolicloud-displaymanager|oem-config)
 	exit 0
 	;;
     *)
