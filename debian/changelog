@@ -1,3 +1,11 @@
+plymouth (0.8.2-3jolicloud20+l2) robby; urgency=low
+
+  * Use 'Restarting...' instead of 'Rebooting...'
+  * Added jolicloud-displaymanager
+  * Updated theme for Jolicloud OS 1.2
+
+ -- Jérémy Bethmont <jerem@jolicloud.org>  Fri, 04 Feb 2011 14:12:08 +0100
+
 plymouth (0.8.2-3jolicloud19+l2) robby; urgency=low
 
   [ Romain Huet ]
