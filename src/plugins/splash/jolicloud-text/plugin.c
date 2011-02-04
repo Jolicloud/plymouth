@@ -185,16 +185,16 @@ view_start_animation (view_t *view)
 
   ply_terminal_set_color_hex_value (terminal,
                                     PLY_TERMINAL_COLOR_BLACK,
-                                    0x27282c); 
+                                    0x021b26); 
   ply_terminal_set_color_hex_value (terminal,
                                     PLY_TERMINAL_COLOR_WHITE,
                                     0xffffff);
   ply_terminal_set_color_hex_value (terminal,
                                     PLY_TERMINAL_COLOR_BROWN,
-                                    0xff4012);
+                                    0x15b0d5);
   ply_terminal_set_color_hex_value (terminal,
                                     PLY_TERMINAL_COLOR_BLUE,
-                                    0x988592);
+                                    0xaddde5);
 
   ply_text_display_set_background_color (view->display,
                                          PLY_TERMINAL_COLOR_BLACK);
@@ -424,7 +424,7 @@ animate_frame (ply_boot_splash_plugin_t *plugin,
 
       ply_text_display_set_background_color (view->display, PLY_TERMINAL_COLOR_BLACK);
       ply_text_display_set_foreground_color (view->display, PLY_TERMINAL_COLOR_WHITE);
-      ply_text_display_write (view->display, "Jolicloud 1.1");
+      ply_text_display_write (view->display, "Jolicloud OS");
 
       ply_text_display_set_cursor_position (view->display,
                                             (display_width - 10) / 2,
