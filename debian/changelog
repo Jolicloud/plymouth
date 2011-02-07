@@ -1,3 +1,9 @@
+plymouth (0.8.2-3jolicloud21+l2) robby; urgency=low
+
+  * Fixed message, text colors, an cloud's speed.
+
+ -- Jérémy Bethmont <jerem@jolicloud.org>  Mon, 07 Feb 2011 10:37:17 +0100
+
 plymouth (0.8.2-3jolicloud20+l2) robby; urgency=low
 
   * Use 'Restarting...' instead of 'Rebooting...'
