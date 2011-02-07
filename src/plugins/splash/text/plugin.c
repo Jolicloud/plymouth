@@ -184,10 +184,10 @@ view_start_animation (view_t *view)
                                     0xffffff);
   ply_terminal_set_color_hex_value (terminal,
                                     PLY_TERMINAL_COLOR_BLUE,
-                                    0x0073B3);
+                                    0xffffff);
   ply_terminal_set_color_hex_value (terminal,
                                     PLY_TERMINAL_COLOR_BROWN,
-                                    0x00457E);
+                                    0x0073B3);
 
   ply_text_display_set_background_color (view->display,
                                          PLY_TERMINAL_COLOR_BLACK);

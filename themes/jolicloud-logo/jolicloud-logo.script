@@ -161,7 +161,8 @@ fun get_label_position (label, is_fake) {
     message_label.x = (screen_width / 2) - (message_label.width / 2);
     
     # Place the label below the logo 
-    message_label.y = logo.y + logo.height + logo_spacing; # message_label.height / 2;
+    # message_label.y = logo.y + logo.height + logo_spacing; # message_label.height / 2;
+    message_label.y = (screen_height / 2) + 152;
     
 #    message_debug = "msg_x = " + message_label.x + " msg_y = " + message_label.y +
 #                    "msg_width = " + message_label.width + " msg_height = " +
@@ -735,9 +736,9 @@ fun refresh_callback ()
     for ( i = 0; i < 5; i++ ) {
         cloud[ i ].progress++;
         if (aspect < 1.6) {
-            cloud[ i ].x -= Math.Int( cloud[ i ].progress * cloud[ i ].ratio / 7);
+            cloud[ i ].x -= Math.Int( cloud[ i ].progress * cloud[ i ].ratio / 5);
         } else {
-            cloud[ i ].x -= Math.Int( cloud[ i ].progress * cloud[ i ].ratio / 10);
+            cloud[ i ].x -= Math.Int( cloud[ i ].progress * cloud[ i ].ratio / 8);
         }
         if ( ( cloud[ i ].origX - cloud[ i ].x ) > 330 ) {
             cloud[ i ].x = cloud[ i ].origX;
