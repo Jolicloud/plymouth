@@ -1,3 +1,9 @@
+plymouth (0.8.2-3jolicloud22+l2) robby; urgency=low
+
+  * Updated wording, use "Joli OS" instead of Jolicloud OS.
+
+ -- Jérémy Bethmont <jerem@jolicloud.org>  Tue, 22 Feb 2011 14:58:10 +0100
+
 plymouth (0.8.2-3jolicloud21+l2) robby; urgency=low
 
   * Fixed message, text colors, an cloud's speed.
