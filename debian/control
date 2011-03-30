@@ -4,6 +4,8 @@ Priority: optional
 Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Build-Depends: debhelper (>= 7.3.15ubuntu3), libpng12-dev, libcairo2-dev, libgtk2.0-dev, libpango1.0-dev, autotools-dev, libdrm-dev, git-core
 Standards-Version: 3.8.3.0
+Vcs-Git: git://github.com/jolicloud/plymouth.git
+Vcs-Browser: https://github.com/jolicloud/plymouth
 
 Package: plymouth
 Architecture: any
