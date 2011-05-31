@@ -20,7 +20,7 @@ case "$1" in
     configure)
 	update-alternatives \
 		--install /lib/plymouth/themes/default.plymouth default.plymouth \
-		/lib/plymouth/themes/jolicloud-logo/jolicloud-logo.plymouth 100
+		/lib/plymouth/themes/jolicloud-logo/jolicloud-logo.plymouth 200
 
 	if which update-initramfs >/dev/null 2>&1
 	then
