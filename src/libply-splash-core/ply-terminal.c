@@ -183,7 +183,7 @@ ply_terminal_set_unbuffered_input (ply_terminal_t *terminal)
   term_attributes.c_iflag |= ICRNL;
 
   /* Make \n return go to the beginning of the next line */
-  term_attributes.c_oflag |= ONLCR;
+  term_attributes.c_oflag |= ONLCR | OPOST;
 
   if (tcsetattr (terminal->fd, TCSANOW, &term_attributes) != 0)
     return false;

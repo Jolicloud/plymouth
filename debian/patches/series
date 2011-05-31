@@ -1,3 +1,2 @@
-upstream-terminal-OPOST.patch
 upstream-terminal-no-ISTRIP.patch
 autoreconf.patch
