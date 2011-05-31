@@ -63,6 +63,10 @@
 
 #define BYTES_PER_PIXEL (4)
 
+#ifndef PLY_MAX_COMMAND_LINE_SIZE
+#define PLY_MAX_COMMAND_LINE_SIZE 512
+#endif
+
 struct _ply_renderer_head
 {
   ply_renderer_backend_t *backend;
@@ -428,6 +432,38 @@ on_active_vt_changed (ply_renderer_backend_t *backend)
 }
 
 static bool
+nouveau_force_drm (void)
+{
+  int fd;
+  char kernel_command_line[PLY_MAX_COMMAND_LINE_SIZE];
+
+  ply_trace ("opening /proc/cmdline");
+  fd = open ("/proc/cmdline", O_RDONLY);
+
+  if (fd < 0)
+    {
+      ply_trace ("couldn't open it: %m");
+      return false;
+    }
+
+  ply_trace ("reading kernel command line");
+  if (read (fd, kernel_command_line, sizeof (kernel_command_line)) < 0)
+    {
+      ply_trace ("couldn't read it: %m");
+      return false;
+    }
+
+  ply_trace ("Kernel command line is: '%s'", kernel_command_line);
+  close (fd);
+
+  if (ply_string_has_prefix (kernel_command_line, "plymouth:force-drm") ||
+      strstr (kernel_command_line, " plymouth:force-drm") != NULL)
+    return true;
+  else
+    return false;
+}
+
+static bool
 load_driver (ply_renderer_backend_t *backend)
 {
   char *driver_name;
@@ -457,8 +493,13 @@ load_driver (ply_renderer_backend_t *backend)
   else if (strcmp (driver_name, "nouveau") == 0
            || strcmp (driver_name, "lbm-nouveau") == 0)
     {
-      backend->driver_interface = ply_renderer_nouveau_driver_get_interface ();
-      backend->driver_supports_mapping_console = false;
+      if (nouveau_force_drm ())
+        {
+          backend->driver_interface = ply_renderer_nouveau_driver_get_interface ();
+          backend->driver_supports_mapping_console = false;
+        }
+      else
+        ply_trace("falling back to framebuffer for nouveau to avoid DRM hang");
     }
   free (driver_name);
 
