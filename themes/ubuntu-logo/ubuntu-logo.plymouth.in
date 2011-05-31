@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Ubuntu Logo
+Description=A theme that features a blank background with a logo.
+ModuleName=script
+
+[script]
+ImageDir=@PLYMOUTH_THEME_PATH@/ubuntu-logo
+ScriptFile=@PLYMOUTH_THEME_PATH@/ubuntu-logo/ubuntu-logo.script

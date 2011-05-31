@@ -293,6 +293,7 @@ AC_CONFIG_FILES([Makefile
            themes/solar/Makefile
            themes/glow/Makefile
            themes/script/Makefile
+           themes/ubuntu-logo/Makefile
            images/Makefile
 	   scripts/plymouth-generate-initrd
 	   scripts/plymouth-populate-initrd
