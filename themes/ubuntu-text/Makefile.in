@@ -34,7 +34,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = themes/spinfinity
+subdir = themes/ubuntu-text
 DIST_COMMON = $(dist_theme_DATA) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -75,8 +75,8 @@ am__nobase_list = $(am__nobase_strip_setup); \
 am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__installdirs = "$(DESTDIR)$(themedir)" "$(DESTDIR)$(themedir)"
-DATA = $(dist_theme_DATA) $(nodist_theme_DATA)
+am__installdirs = "$(DESTDIR)$(themedir)"
+DATA = $(dist_theme_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -224,51 +224,9 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-themedir = $(datadir)/plymouth/themes/spinfinity
-nodist_theme_DATA = spinfinity.plymouth
-dist_theme_DATA = \
-                  box.png                                             \
-                  bullet.png                                          \
-                  entry.png                                           \
-                  lock.png                                            \
-                  throbber-00.png                                     \
-                  throbber-01.png                                     \
-                  throbber-02.png                                     \
-                  throbber-03.png                                     \
-                  throbber-04.png                                     \
-                  throbber-05.png                                     \
-                  throbber-06.png                                     \
-                  throbber-07.png                                     \
-                  throbber-08.png                                     \
-                  throbber-09.png                                     \
-                  throbber-10.png                                     \
-                  throbber-11.png                                     \
-                  throbber-12.png                                     \
-                  throbber-13.png                                     \
-                  throbber-14.png                                     \
-                  throbber-15.png                                     \
-                  throbber-16.png                                     \
-                  throbber-17.png                                     \
-                  throbber-18.png                                     \
-                  throbber-19.png                                     \
-                  throbber-20.png                                     \
-                  throbber-21.png                                     \
-                  throbber-22.png                                     \
-                  throbber-23.png                                     \
-                  throbber-24.png                                     \
-                  throbber-25.png                                     \
-                  throbber-26.png                                     \
-                  throbber-27.png                                     \
-                  throbber-28.png                                     \
-                  throbber-29.png                                     \
-                  throbber-30.png                                     \
-                  throbber-31.png                                     \
-                  throbber-32.png                                     \
-                  throbber-33.png
-
-MAINTAINERCLEANFILES = Makefile.in spinfinity.plymouth
-CLEANFILES = spinfinity.plymouth
-EXTRA_DIST = spinfinity.plymouth.in
+themedir = $(datadir)/plymouth/themes/ubuntu-text
+dist_theme_DATA = ubuntu-text.plymouth.in
+MAINTAINERCLEANFILES = Makefile.in
 all: all-am
 
 .SUFFIXES:
@@ -281,9 +239,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu themes/spinfinity/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu themes/ubuntu-text/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu themes/spinfinity/Makefile
+	  $(AUTOMAKE) --gnu themes/ubuntu-text/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -324,26 +282,6 @@ install-dist_themeDATA: $(dist_theme_DATA)
 uninstall-dist_themeDATA:
 	@$(NORMAL_UNINSTALL)
 	@list='$(dist_theme_DATA)'; test -n "$(themedir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(themedir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(themedir)" && rm -f $$files
-install-nodist_themeDATA: $(nodist_theme_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(themedir)" || $(MKDIR_P) "$(DESTDIR)$(themedir)"
-	@list='$(nodist_theme_DATA)'; test -n "$(themedir)" || list=; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(themedir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(themedir)" || exit $$?; \
-	done
-
-uninstall-nodist_themeDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(nodist_theme_DATA)'; test -n "$(themedir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	test -n "$$files" || exit 0; \
 	echo " ( cd '$(DESTDIR)$(themedir)' && rm -f" $$files ")"; \
@@ -389,7 +327,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(themedir)" "$(DESTDIR)$(themedir)"; do \
+	for dir in "$(DESTDIR)$(themedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -409,7 +347,6 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -439,7 +376,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-dist_themeDATA install-nodist_themeDATA
+install-data-am: install-dist_themeDATA
 
 install-dvi: install-dvi-am
 
@@ -483,7 +420,7 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-dist_themeDATA uninstall-nodist_themeDATA
+uninstall-am: uninstall-dist_themeDATA
 
 .MAKE: install-am install-strip
 
@@ -493,17 +430,12 @@ uninstall-am: uninstall-dist_themeDATA uninstall-nodist_themeDATA
 	install-data install-data-am install-dist_themeDATA \
 	install-dvi install-dvi-am install-exec install-exec-am \
 	install-html install-html-am install-info install-info-am \
-	install-man install-nodist_themeDATA install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am uninstall uninstall-am \
-	uninstall-dist_themeDATA uninstall-nodist_themeDATA
+	install-man install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+	ps ps-am uninstall uninstall-am uninstall-dist_themeDATA
 
-
-spinfinity.plymouth: $(srcdir)/spinfinity.plymouth.in
-	sed -e 's,[@]PLYMOUTH_THEME_PATH[@],$(PLYMOUTH_THEME_PATH),g' \
-	       $(srcdir)/spinfinity.plymouth.in > spinfinity.plymouth
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

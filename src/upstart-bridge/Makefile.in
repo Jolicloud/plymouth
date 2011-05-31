@@ -34,7 +34,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = src/plugins/splash/text
+plymouth_PROGRAMS = plymouth-upstart-bridge$(EXEEXT)
+subdir = src/upstart-bridge
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -45,40 +46,24 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
-am__install_max = 40
-am__nobase_strip_setup = \
-  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
-am__nobase_strip = \
-  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
-am__nobase_list = $(am__nobase_strip_setup); \
-  for p in $$list; do echo "$$p $$p"; done | \
-  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
-  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
-    if (++n[$$2] == $(am__install_max)) \
-      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
-    END { for (dir in files) print dir, files[dir] }'
-am__base_list = \
-  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
-  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__installdirs = "$(DESTDIR)$(plugindir)"
-LTLIBRARIES = $(plugin_LTLIBRARIES)
+am__installdirs = "$(DESTDIR)$(plymouthdir)"
+PROGRAMS = $(plymouth_PROGRAMS)
+am_plymouth_upstart_bridge_OBJECTS =  \
+	plymouth_upstart_bridge-ply-upstart-monitor.$(OBJEXT) \
+	plymouth_upstart_bridge-plymouth-upstart-bridge.$(OBJEXT)
+plymouth_upstart_bridge_OBJECTS =  \
+	$(am_plymouth_upstart_bridge_OBJECTS)
 am__DEPENDENCIES_1 =
-text_la_DEPENDENCIES = $(am__DEPENDENCIES_1) ../../../libply/libply.la \
-	../../../libply-splash-core/libply-splash-core.la
-am_text_la_OBJECTS = text_la-plugin.lo
-text_la_OBJECTS = $(am_text_la_OBJECTS)
+plymouth_upstart_bridge_DEPENDENCIES = $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	../libply/libply.la ../client/libply-boot-client.la
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
-text_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(text_la_CFLAGS) \
-	$(CFLAGS) $(text_la_LDFLAGS) $(LDFLAGS) -o $@
+plymouth_upstart_bridge_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
+	$(plymouth_upstart_bridge_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/build-tools/depcomp
 am__depfiles_maybe = depfiles
@@ -105,8 +90,8 @@ am__v_CCLD_0 = @echo "  CCLD  " $@;
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(text_la_SOURCES)
-DIST_SOURCES = $(text_la_SOURCES)
+SOURCES = $(plymouth_upstart_bridge_SOURCES)
+DIST_SOURCES = $(plymouth_upstart_bridge_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -257,27 +242,26 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 INCLUDES = -I$(top_srcdir)                                                    \
-           -I$(srcdir)/../../../libply                                        \
-           -I$(srcdir)/../../../libply-splash-core                            \
-           -I$(srcdir)/../../..                                               \
-           -I$(srcdir)/../..                                                  \
-           -I$(srcdir)/..                                                     \
+           -I$(top_srcdir)/src                                                \
+           -I$(top_srcdir)/src/libply                                         \
+           -I$(top_srcdir)/src/client                                         \
            -I$(srcdir)
 
-plugindir = $(libdir)/plymouth
-plugin_LTLIBRARIES = text.la
-text_la_CFLAGS = $(PLYMOUTH_CFLAGS)                                           \
-                 -DPLYMOUTH_BACKGROUND_COLOR=$(background_color)              \
-                 -DPLYMOUTH_BACKGROUND_END_COLOR=$(background_end_color)      \
-                 -DPLYMOUTH_BACKGROUND_START_COLOR=$(background_start_color)
+plymouthdir = $(plymouthclientdir)
+plymouth_upstart_bridge_CFLAGS = $(PLYMOUTH_CFLAGS) $(DBUS_CFLAGS)
+plymouth_upstart_bridge_LDADD = \
+                      $(PLYMOUTH_LIBS) \
+                      $(DBUS_LIBS) \
+                      $(CURSES_LIBS) \
+                      ../libply/libply.la \
+                      ../client/libply-boot-client.la
 
-text_la_LDFLAGS = -module -avoid-version -export-dynamic
-text_la_LIBADD = $(PLYMOUTH_LIBS)                                            \
-                 ../../../libply/libply.la                                   \
-                 ../../../libply-splash-core/libply-splash-core.la
+plymouth_upstart_bridge_SOURCES = \
+                      $(srcdir)/../ply-boot-protocol.h                        \
+                      $(srcdir)/ply-upstart-monitor.h                         \
+                      $(srcdir)/ply-upstart-monitor.c                         \
+                      $(srcdir)/plymouth-upstart-bridge.c
 
-text_la_SOURCES = $(srcdir)/plugin.c
-MAINTAINERCLEANFILES = Makefile.in
 all: all-am
 
 .SUFFIXES:
@@ -291,9 +275,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/plugins/splash/text/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/upstart-bridge/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/plugins/splash/text/Makefile
+	  $(AUTOMAKE) --gnu src/upstart-bridge/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -312,39 +296,52 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-install-pluginLTLIBRARIES: $(plugin_LTLIBRARIES)
+install-plymouthPROGRAMS: $(plymouth_PROGRAMS)
 	@$(NORMAL_INSTALL)
-	test -z "$(plugindir)" || $(MKDIR_P) "$(DESTDIR)$(plugindir)"
-	@list='$(plugin_LTLIBRARIES)'; test -n "$(plugindir)" || list=; \
-	list2=; for p in $$list; do \
-	  if test -f $$p; then \
-	    list2="$$list2 $$p"; \
-	  else :; fi; \
-	done; \
-	test -z "$$list2" || { \
-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(plugindir)'"; \
-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(plugindir)"; \
-	}
+	test -z "$(plymouthdir)" || $(MKDIR_P) "$(DESTDIR)$(plymouthdir)"
+	@list='$(plymouth_PROGRAMS)'; test -n "$(plymouthdir)" || list=; \
+	for p in $$list; do echo "$$p $$p"; done | \
+	sed 's/$(EXEEXT)$$//' | \
+	while read p p1; do if test -f $$p || test -f $$p1; \
+	  then echo "$$p"; echo "$$p"; else :; fi; \
+	done | \
+	sed -e 'p;s,.*/,,;n;h' -e 's|.*|.|' \
+	    -e 'p;x;s,.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/' | \
+	sed 'N;N;N;s,\n, ,g' | \
+	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1 } \
+	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
+	    if ($$2 == $$4) files[d] = files[d] " " $$1; \
+	    else { print "f", $$3 "/" $$4, $$1; } } \
+	  END { for (d in files) print "f", d, files[d] }' | \
+	while read type dir files; do \
+	    if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
+	    test -z "$$files" || { \
+	    echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(plymouthdir)$$dir'"; \
+	    $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(plymouthdir)$$dir" || exit $$?; \
+	    } \
+	; done
 
-uninstall-pluginLTLIBRARIES:
+uninstall-plymouthPROGRAMS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(plugin_LTLIBRARIES)'; test -n "$(plugindir)" || list=; \
-	for p in $$list; do \
-	  $(am__strip_dir) \
-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(plugindir)/$$f'"; \
-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(plugindir)/$$f"; \
-	done
+	@list='$(plymouth_PROGRAMS)'; test -n "$(plymouthdir)" || list=; \
+	files=`for p in $$list; do echo "$$p"; done | \
+	  sed -e 'h;s,^.*/,,;s/$(EXEEXT)$$//;$(transform)' \
+	      -e 's/$$/$(EXEEXT)/' `; \
+	test -n "$$list" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(plymouthdir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(plymouthdir)" && rm -f $$files
 
-clean-pluginLTLIBRARIES:
-	-test -z "$(plugin_LTLIBRARIES)" || rm -f $(plugin_LTLIBRARIES)
-	@list='$(plugin_LTLIBRARIES)'; for p in $$list; do \
-	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
-	  test "$$dir" != "$$p" || dir=.; \
-	  echo "rm -f \"$${dir}/so_locations\""; \
-	  rm -f "$${dir}/so_locations"; \
-	done
-text.la: $(text_la_OBJECTS) $(text_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(text_la_LINK) -rpath $(plugindir) $(text_la_OBJECTS) $(text_la_LIBADD) $(LIBS)
+clean-plymouthPROGRAMS:
+	@list='$(plymouth_PROGRAMS)'; test -n "$$list" || exit 0; \
+	echo " rm -f" $$list; \
+	rm -f $$list || exit $$?; \
+	test -n "$(EXEEXT)" || exit 0; \
+	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
+	echo " rm -f" $$list; \
+	rm -f $$list
+plymouth-upstart-bridge$(EXEEXT): $(plymouth_upstart_bridge_OBJECTS) $(plymouth_upstart_bridge_DEPENDENCIES) 
+	@rm -f plymouth-upstart-bridge$(EXEEXT)
+	$(AM_V_CCLD)$(plymouth_upstart_bridge_LINK) $(plymouth_upstart_bridge_OBJECTS) $(plymouth_upstart_bridge_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -352,7 +349,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text_la-plugin.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/plymouth_upstart_bridge-ply-upstart-monitor.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/plymouth_upstart_bridge-plymouth-upstart-bridge.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -378,13 +376,37 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
-text_la-plugin.lo: $(srcdir)/plugin.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(text_la_CFLAGS) $(CFLAGS) -MT text_la-plugin.lo -MD -MP -MF $(DEPDIR)/text_la-plugin.Tpo -c -o text_la-plugin.lo `test -f '$(srcdir)/plugin.c' || echo '$(srcdir)/'`$(srcdir)/plugin.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/text_la-plugin.Tpo $(DEPDIR)/text_la-plugin.Plo
+plymouth_upstart_bridge-ply-upstart-monitor.o: $(srcdir)/ply-upstart-monitor.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plymouth_upstart_bridge_CFLAGS) $(CFLAGS) -MT plymouth_upstart_bridge-ply-upstart-monitor.o -MD -MP -MF $(DEPDIR)/plymouth_upstart_bridge-ply-upstart-monitor.Tpo -c -o plymouth_upstart_bridge-ply-upstart-monitor.o `test -f '$(srcdir)/ply-upstart-monitor.c' || echo '$(srcdir)/'`$(srcdir)/ply-upstart-monitor.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/plymouth_upstart_bridge-ply-upstart-monitor.Tpo $(DEPDIR)/plymouth_upstart_bridge-ply-upstart-monitor.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcdir)/plugin.c' object='text_la-plugin.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcdir)/ply-upstart-monitor.c' object='plymouth_upstart_bridge-ply-upstart-monitor.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(text_la_CFLAGS) $(CFLAGS) -c -o text_la-plugin.lo `test -f '$(srcdir)/plugin.c' || echo '$(srcdir)/'`$(srcdir)/plugin.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plymouth_upstart_bridge_CFLAGS) $(CFLAGS) -c -o plymouth_upstart_bridge-ply-upstart-monitor.o `test -f '$(srcdir)/ply-upstart-monitor.c' || echo '$(srcdir)/'`$(srcdir)/ply-upstart-monitor.c
+
+plymouth_upstart_bridge-ply-upstart-monitor.obj: $(srcdir)/ply-upstart-monitor.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plymouth_upstart_bridge_CFLAGS) $(CFLAGS) -MT plymouth_upstart_bridge-ply-upstart-monitor.obj -MD -MP -MF $(DEPDIR)/plymouth_upstart_bridge-ply-upstart-monitor.Tpo -c -o plymouth_upstart_bridge-ply-upstart-monitor.obj `if test -f '$(srcdir)/ply-upstart-monitor.c'; then $(CYGPATH_W) '$(srcdir)/ply-upstart-monitor.c'; else $(CYGPATH_W) '$(srcdir)/$(srcdir)/ply-upstart-monitor.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/plymouth_upstart_bridge-ply-upstart-monitor.Tpo $(DEPDIR)/plymouth_upstart_bridge-ply-upstart-monitor.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcdir)/ply-upstart-monitor.c' object='plymouth_upstart_bridge-ply-upstart-monitor.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plymouth_upstart_bridge_CFLAGS) $(CFLAGS) -c -o plymouth_upstart_bridge-ply-upstart-monitor.obj `if test -f '$(srcdir)/ply-upstart-monitor.c'; then $(CYGPATH_W) '$(srcdir)/ply-upstart-monitor.c'; else $(CYGPATH_W) '$(srcdir)/$(srcdir)/ply-upstart-monitor.c'; fi`
+
+plymouth_upstart_bridge-plymouth-upstart-bridge.o: $(srcdir)/plymouth-upstart-bridge.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plymouth_upstart_bridge_CFLAGS) $(CFLAGS) -MT plymouth_upstart_bridge-plymouth-upstart-bridge.o -MD -MP -MF $(DEPDIR)/plymouth_upstart_bridge-plymouth-upstart-bridge.Tpo -c -o plymouth_upstart_bridge-plymouth-upstart-bridge.o `test -f '$(srcdir)/plymouth-upstart-bridge.c' || echo '$(srcdir)/'`$(srcdir)/plymouth-upstart-bridge.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/plymouth_upstart_bridge-plymouth-upstart-bridge.Tpo $(DEPDIR)/plymouth_upstart_bridge-plymouth-upstart-bridge.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcdir)/plymouth-upstart-bridge.c' object='plymouth_upstart_bridge-plymouth-upstart-bridge.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plymouth_upstart_bridge_CFLAGS) $(CFLAGS) -c -o plymouth_upstart_bridge-plymouth-upstart-bridge.o `test -f '$(srcdir)/plymouth-upstart-bridge.c' || echo '$(srcdir)/'`$(srcdir)/plymouth-upstart-bridge.c
+
+plymouth_upstart_bridge-plymouth-upstart-bridge.obj: $(srcdir)/plymouth-upstart-bridge.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plymouth_upstart_bridge_CFLAGS) $(CFLAGS) -MT plymouth_upstart_bridge-plymouth-upstart-bridge.obj -MD -MP -MF $(DEPDIR)/plymouth_upstart_bridge-plymouth-upstart-bridge.Tpo -c -o plymouth_upstart_bridge-plymouth-upstart-bridge.obj `if test -f '$(srcdir)/plymouth-upstart-bridge.c'; then $(CYGPATH_W) '$(srcdir)/plymouth-upstart-bridge.c'; else $(CYGPATH_W) '$(srcdir)/$(srcdir)/plymouth-upstart-bridge.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/plymouth_upstart_bridge-plymouth-upstart-bridge.Tpo $(DEPDIR)/plymouth_upstart_bridge-plymouth-upstart-bridge.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcdir)/plymouth-upstart-bridge.c' object='plymouth_upstart_bridge-plymouth-upstart-bridge.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plymouth_upstart_bridge_CFLAGS) $(CFLAGS) -c -o plymouth_upstart_bridge-plymouth-upstart-bridge.obj `if test -f '$(srcdir)/plymouth-upstart-bridge.c'; then $(CYGPATH_W) '$(srcdir)/plymouth-upstart-bridge.c'; else $(CYGPATH_W) '$(srcdir)/$(srcdir)/plymouth-upstart-bridge.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -476,9 +498,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES)
+all-am: Makefile $(PROGRAMS)
 installdirs:
-	for dir in "$(DESTDIR)$(plugindir)"; do \
+	for dir in "$(DESTDIR)$(plymouthdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -506,10 +528,9 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 clean: clean-am
 
-clean-am: clean-generic clean-libtool clean-pluginLTLIBRARIES \
+clean-am: clean-generic clean-libtool clean-plymouthPROGRAMS \
 	mostlyclean-am
 
 distclean: distclean-am
@@ -530,7 +551,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-pluginLTLIBRARIES
+install-data-am: install-plymouthPROGRAMS
 
 install-dvi: install-dvi-am
 
@@ -576,23 +597,23 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-pluginLTLIBRARIES
+uninstall-am: uninstall-plymouthPROGRAMS
 
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool clean-pluginLTLIBRARIES ctags distclean \
+	clean-libtool clean-plymouthPROGRAMS ctags distclean \
 	distclean-compile distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-dvi \
 	install-dvi-am install-exec install-exec-am install-html \
 	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-pluginLTLIBRARIES \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-pluginLTLIBRARIES
+	install-pdf install-pdf-am install-plymouthPROGRAMS install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
+	uninstall-am uninstall-plymouthPROGRAMS
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

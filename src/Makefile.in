@@ -35,6 +35,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@ENABLE_UPSTART_MONITORING_TRUE@am__append_1 = upstart-bridge
 plymouthdbin_PROGRAMS = plymouthd$(EXEEXT)
 subdir = src
 DIST_COMMON = $(dist_plymouthd_conf_DATA) \
@@ -132,7 +133,8 @@ AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
 	distdir
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = $(SUBDIRS)
+DIST_SUBDIRS = libply libply-splash-core libply-splash-graphics . \
+	plugins client viewer tests upstart-bridge
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 am__relativize = \
   dir0=`pwd`; \
@@ -172,7 +174,10 @@ CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
+CURSES_LIBS = @CURSES_LIBS@
 CYGPATH_W = @CYGPATH_W@
+DBUS_CFLAGS = @DBUS_CFLAGS@
+DBUS_LIBS = @DBUS_LIBS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DRM_CFLAGS = @DRM_CFLAGS@
@@ -220,11 +225,14 @@ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
+PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PANGO_CFLAGS = @PANGO_CFLAGS@
 PANGO_LIBS = @PANGO_LIBS@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 PLYMOUTH_CFLAGS = @PLYMOUTH_CFLAGS@
 PLYMOUTH_CONF_DIR = @PLYMOUTH_CONF_DIR@
 PLYMOUTH_DATADIR = @PLYMOUTH_DATADIR@
@@ -299,7 +307,8 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = libply libply-splash-core libply-splash-graphics . plugins client viewer tests
+SUBDIRS = libply libply-splash-core libply-splash-graphics . plugins \
+	client viewer tests $(am__append_1)
 INCLUDES = -I$(top_srcdir)                                                    \
            -I$(srcdir)/libply                                                 \
            -I$(srcdir)/libply-splash-core                                     \

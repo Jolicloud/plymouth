@@ -3,6 +3,10 @@
 /* TTY to use in boot mode */
 #undef BOOT_TTY
 
+/* Define to 1 if you have the declaration of `MSG_NOSIGNAL', and to 0 if you
+   don't. */
+#undef HAVE_DECL_MSG_NOSIGNAL
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
@@ -11,6 +15,12 @@
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the <ncursesw/term.h> header file. */
+#undef HAVE_NCURSESW_TERM_H
+
+/* Define to 1 if you have the <ncurses/term.h> header file. */
+#undef HAVE_NCURSES_TERM_H
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
@@ -24,11 +34,17 @@
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
 
+/* Define to 1 if you have the <sys/io.h> header file. */
+#undef HAVE_SYS_IO_H
+
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #undef HAVE_SYS_STAT_H
 
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <term.h> header file. */
+#undef HAVE_TERM_H
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
@@ -54,6 +70,9 @@
 
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
