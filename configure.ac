@@ -115,6 +115,23 @@ if test x$enable_gdm_transition = xyes; then
   AC_DEFINE(PLY_ENABLE_GDM_TRANSITION, 1, [Enable smooth transition to GDM])
 fi
 
+AC_ARG_ENABLE(upstart-monitoring, AS_HELP_STRING([--enable-upstart-monitoring],[listen for messages on the Upstart D-Bus interface]),enable_upstart_monitoring=$enableval,enable_upstart_monitoring=no)
+if test x$enable_upstart_monitoring = xyes; then
+  PKG_CHECK_MODULES(DBUS, [dbus-1])
+  AC_SUBST(DBUS_CFLAGS)
+  AC_SUBST(DBUS_LIBS)
+  AC_CHECK_HEADERS([ncursesw/term.h ncurses/term.h term.h], [break])
+  AC_CHECK_LIB([ncursesw], [initscr],
+    [CURSES_LIBS="$CURSES_LIBS -lncursesw"],
+    [AC_CHECK_LIB([ncurses], [initscr],
+      [CURSES_LIBS="$CURSES_LIBS -lncurses"],
+      [AC_CHECK_LIB([curses], [initscr],
+        [CURSES_LIBS="$CURSES_LIBS -lcurses"],
+        [AC_MSG_ERROR([no curses library found])])])])
+  AC_SUBST(CURSES_LIBS)
+fi
+AM_CONDITIONAL(ENABLE_UPSTART_MONITORING, [test "$enable_upstart_monitoring" = yes])
+
 AC_ARG_WITH(system-root-install, AS_HELP_STRING([--with-system-root-install],[Install client in /bin and daemon in /sbin]),with_system_root_install=${withval},with_system_root_install=yes)
 AM_CONDITIONAL(WITH_SYSTEM_ROOT_INSTALL,  [test "$with_system_root_install" = yes])
 
@@ -283,6 +300,7 @@ AC_CONFIG_FILES([Makefile
            src/client/ply-boot-client.pc
            src/client/Makefile
            src/viewer/Makefile
+           src/upstart-bridge/Makefile
            src/tests/Makefile
            src/libply/tests/Makefile
            src/client/tests/Makefile

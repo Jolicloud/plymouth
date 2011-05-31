@@ -204,7 +204,6 @@ ply_boot_client_request_new (ply_boot_client_t                  *client,
 
   assert (client != NULL);
   assert (request_command != NULL);
-  assert (handler != NULL);
 
   request = calloc (1, sizeof (ply_boot_client_request_t));
   request->client = client;
@@ -284,7 +283,10 @@ ply_boot_client_process_incoming_replies (ply_boot_client_t *client)
     }
 
   if (memcmp (byte, PLY_BOOT_PROTOCOL_RESPONSE_TYPE_ACK, sizeof (uint8_t)) == 0)
-      request->handler (request->user_data, client);
+    {
+      if (request->handler != NULL)
+        request->handler (request->user_data, client);
+    }
   else if (memcmp (byte, PLY_BOOT_PROTOCOL_RESPONSE_TYPE_ANSWER, sizeof (uint8_t)) == 0)
     {
       char *answer;
@@ -300,7 +302,8 @@ ply_boot_client_process_incoming_replies (ply_boot_client_t *client)
         }
 
       answer[size] = '\0';
-      ((ply_boot_client_answer_handler_t) request->handler) (request->user_data, answer, client);
+      if (request->handler != NULL)
+        ((ply_boot_client_answer_handler_t) request->handler) (request->user_data, answer, client);
       free(answer);
     }
   else if (memcmp (byte, PLY_BOOT_PROTOCOL_RESPONSE_TYPE_MULTIPLE_ANSWERS, sizeof (uint8_t)) == 0)
@@ -345,13 +348,15 @@ ply_boot_client_process_incoming_replies (ply_boot_client_t *client)
       answers = (char **) ply_array_steal_elements (array);
       ply_array_free (array);
 
-      ((ply_boot_client_multiple_answers_handler_t) request->handler) (request->user_data, (const char * const *) answers, client);
+      if (request->handler != NULL)
+        ((ply_boot_client_multiple_answers_handler_t) request->handler) (request->user_data, (const char * const *) answers, client);
 
       ply_free_string_array (answers);
     }
   else if (memcmp (byte, PLY_BOOT_PROTOCOL_RESPONSE_TYPE_NO_ANSWER, sizeof (uint8_t)) == 0)
     {
-      ((ply_boot_client_answer_handler_t) request->handler) (request->user_data, NULL, client);
+      if (request->handler != NULL)
+        ((ply_boot_client_answer_handler_t) request->handler) (request->user_data, NULL, client);
     }
   else
     goto out;
@@ -487,7 +492,6 @@ ply_boot_client_queue_request (ply_boot_client_t                  *client,
   assert (client->loop != NULL);
   assert (request_command != NULL);
   assert (request_argument == NULL || strlen (request_argument) <= UCHAR_MAX);
-  assert (handler != NULL);
 
   if (client->daemon_can_take_request_watch == NULL &&
       client->socket_fd >= 0)

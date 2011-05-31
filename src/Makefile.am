@@ -1,4 +1,7 @@
 SUBDIRS = libply libply-splash-core libply-splash-graphics . plugins client viewer tests
+if ENABLE_UPSTART_MONITORING
+SUBDIRS += upstart-bridge
+endif
 INCLUDES = -I$(top_srcdir)                                                    \
            -I$(srcdir)/libply                                                 \
            -I$(srcdir)/libply-splash-core                                     \

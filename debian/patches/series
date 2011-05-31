@@ -1,4 +1,3 @@
-upstart-bridge.patch
 avoid-sigpipe.patch
 upstream-event-loop-reference.patch
 upstream-event-loop-number.patch
