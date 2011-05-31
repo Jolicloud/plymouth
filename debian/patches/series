@@ -1,4 +1,3 @@
-vga16fb-renderer.patch
 lbm-nouveau.patch
 nouveau-framebuffer.patch
 ubuntu-logo.patch

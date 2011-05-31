@@ -231,6 +231,7 @@ ply_renderer_open (ply_renderer_t *renderer)
       PLYMOUTH_PLUGIN_PATH "renderers/x11.so",
       PLYMOUTH_PLUGIN_PATH "renderers/drm.so",
       PLYMOUTH_PLUGIN_PATH "renderers/frame-buffer.so",
+      PLYMOUTH_PLUGIN_PATH "renderers/vga16fb.so",
       NULL
     };
 
