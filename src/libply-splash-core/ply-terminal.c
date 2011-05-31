@@ -179,6 +179,9 @@ ply_terminal_set_unbuffered_input (ply_terminal_t *terminal)
 
   cfmakeraw (&term_attributes);
 
+  /* Make return output new line like canonical mode */
+  term_attributes.c_iflag |= ICRNL;
+
   /* Make \n return go to the beginning of the next line */
   term_attributes.c_oflag |= ONLCR;
 

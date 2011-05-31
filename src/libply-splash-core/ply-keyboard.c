@@ -45,7 +45,7 @@
 #define KEY_CTRL_W ('\100' ^'W')
 #define KEY_CTRL_V ('\100' ^'V')
 #define KEY_ESCAPE ('\100' ^'[')
-#define KEY_RETURN '\r'
+#define KEY_RETURN '\n'
 #define KEY_BACKSPACE '\177'
 
 typedef void (* ply_keyboard_handler_t) (void *);
