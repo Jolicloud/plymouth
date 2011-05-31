@@ -1,3 +1,10 @@
+plymouth (0.8.2-3jolicloud21+n23) natty; urgency=low
+
+  * Ported the jolicloud theme from robby-1.2 (0.8.2-3jolicloud21+l2) into natty
+  * Bump the update-alternatives' priority on the jolicloud theme
+
+ -- Adam McDaniel <adam@jolicloud.org>  Tue, 31 May 2011 10:31:06 -0600
+
 plymouth (0.8.2-2ubuntu23) natty-proposed; urgency=low
 
   * details/plugin.c: On every key stroke, the "details" plugin in plymouth
