@@ -180,6 +180,8 @@ AC_DEFINE_UNQUOTED(SHUTDOWN_TTY, "$SHUTDOWN_TTY", [TTY to use in shutdown mode])
 AC_CHECK_HEADERS([sys/io.h])
 AM_CONDITIONAL([BUILD_VGA16FB], [test "x$ac_cv_header_sys_io_h" = xyes])
 
+AC_CHECK_DECLS([MSG_NOSIGNAL], [], [], [[ #include <sys/socket.h> ]])
+
 # Turn on the additional warnings last, so -Werror doesn't affect other tests.
 
 AC_DEFUN([PLYMOUTH_CC_TRY_FLAG], [

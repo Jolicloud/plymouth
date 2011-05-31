@@ -294,6 +294,7 @@ ply_write (int         fd,
 {
   size_t bytes_left_to_write;
   size_t total_bytes_written = 0;
+  int is_a_socket = 1;
 
   assert (fd >= 0);
 
@@ -303,15 +304,27 @@ ply_write (int         fd,
     {
       ssize_t bytes_written = 0;
 
-      bytes_written = write (fd,
-                             ((uint8_t *) buffer) + total_bytes_written,
-                             bytes_left_to_write);
+      if (is_a_socket)
+        bytes_written = send  (fd,
+                               ((uint8_t *) buffer) + total_bytes_written,
+                               bytes_left_to_write,
+                               0
+#if HAVE_DECL_MSG_NOSIGNAL
+                               |MSG_NOSIGNAL
+#endif
+                               );
+      else
+        bytes_written = write (fd,
+                               ((uint8_t *) buffer) + total_bytes_written,
+                               bytes_left_to_write);
 
       if (bytes_written > 0)
         {
           total_bytes_written += bytes_written;
           bytes_left_to_write -= bytes_written;
         }
+      else if ((errno == ENOTSOCK))
+        is_a_socket = 0;
       else if ((errno != EINTR))
         break;
     }
