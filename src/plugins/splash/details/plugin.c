@@ -344,10 +344,8 @@ display_password (ply_boot_splash_plugin_t *plugin,
   }
   else
     write_on_views (plugin,
-                    "Password",
-                    strlen ("Password"));
-
-  write_on_views (plugin, ":", strlen (":"));
+                    "Password:",
+                    strlen ("Password:"));
 
   for (i = 0; i < bullets; i++)
     write_on_views (plugin, "*", strlen ("*"));
