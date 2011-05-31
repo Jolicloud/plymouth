@@ -454,7 +454,8 @@ load_driver (ply_renderer_backend_t *backend)
       backend->driver_interface = ply_renderer_radeon_driver_get_interface ();
       backend->driver_supports_mapping_console = false;
     }
-  else if (strcmp (driver_name, "nouveau") == 0)
+  else if (strcmp (driver_name, "nouveau") == 0
+           || strcmp (driver_name, "lbm-nouveau") == 0)
     {
       backend->driver_interface = ply_renderer_nouveau_driver_get_interface ();
       backend->driver_supports_mapping_console = false;
