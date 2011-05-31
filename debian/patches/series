@@ -1,4 +1,3 @@
-upstream-event-loop-reference.patch
 upstream-event-loop-number.patch
 upstream-terminal-force-newline.patch
 upstream-terminal-OPOST.patch
