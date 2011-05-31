@@ -1274,7 +1274,8 @@ ply_event_loop_process_pending_events (ply_event_loop_t *loop)
        }
 
      number_of_received_events = epoll_wait (loop->epoll_fd, events,
-                                             sizeof (events), timeout);
+                                             PLY_EVENT_LOOP_NUM_EVENT_HANDLERS,
+                                             timeout);
 
      ply_event_loop_handle_timeouts (loop);
 
