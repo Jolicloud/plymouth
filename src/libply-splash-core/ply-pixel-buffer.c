@@ -65,7 +65,7 @@ blend_two_pixel_values (uint32_t pixel_value_1,
     {
       uint8_t alpha_1, red_1, green_1, blue_1;
       uint8_t red_2, green_2, blue_2;
-      uint_least16_t red, green, blue;
+      uint32_t red, green, blue;
 
       alpha_1 = (uint8_t) (pixel_value_1 >> 24);
       red_1 = (uint8_t) (pixel_value_1 >> 16);
