@@ -1,4 +1,3 @@
-kubuntu-text.patch
 gcc45-arith-workaround.patch
 debug-fixes.patch
 upstart-bridge.patch
