@@ -6,6 +6,8 @@
 CFLAGS = -Wall -g
 LDFLAGS = -Wl,--as-needed
 
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+
 # Disable optimisations if noopt found in $DEB_BUILD_OPTIONS
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CFLAGS += -O0
@@ -38,7 +40,8 @@ override_dh_auto_configure:
 		--with-background-start-color-stop=0x2c001e \
 		--with-background-end-color-stop=0x2c001e \
 		--with-boot-tty=/dev/tty7 \
-		--with-shutdown-tty=/dev/tty7
+		--with-shutdown-tty=/dev/tty7 \
+		--enable-upstart-monitoring
 
 override_dh_auto_install:
 	dh_auto_install
@@ -49,6 +52,8 @@ override_dh_install:
 	sed -e'/frame-buffer\.so$$/a\
 $(VGA_RENDERER)' < debian/plymouth.install.in > debian/plymouth.install
 	dh_install
+	sed -i -e's/#DEB_HOST_MULTIARCH#/$(DEB_HOST_MULTIARCH)/g' \
+		debian/plymouth/usr/share/initramfs-tools/hooks/plymouth
 
 override_dh_auto_clean:
 	dh_auto_clean
@@ -60,6 +65,7 @@ override_dh_installinit:
 	dh_installinit --name=plymouth-log --noscripts
 	dh_installinit --name=plymouth-splash --noscripts
 	dh_installinit --name=plymouth-stop --noscripts
+	dh_installinit --name=plymouth-upstart-bridge --noscripts
 
 # Make the initramfs scripts executable
 override_dh_fixperms:

@@ -1,0 +1,56 @@
+Index: plymouth/src/libply/ply-utils.c
+===================================================================
+--- plymouth.orig/src/libply/ply-utils.c	2011-02-14 13:02:57.386349076 +0100
++++ plymouth/src/libply/ply-utils.c	2011-02-14 13:04:58.816527177 +0100
+@@ -294,6 +294,7 @@
+ {
+   size_t bytes_left_to_write;
+   size_t total_bytes_written = 0;
++  int is_a_socket = 1;
+ 
+   assert (fd >= 0);
+ 
+@@ -303,15 +304,27 @@
+     {
+       ssize_t bytes_written = 0;
+ 
+-      bytes_written = write (fd,
+-                             ((uint8_t *) buffer) + total_bytes_written,
+-                             bytes_left_to_write);
++      if (is_a_socket)
++        bytes_written = send  (fd,
++                               ((uint8_t *) buffer) + total_bytes_written,
++                               bytes_left_to_write,
++                               0
++#if HAVE_DECL_MSG_NOSIGNAL
++                               |MSG_NOSIGNAL
++#endif
++                               );
++      else
++        bytes_written = write (fd,
++                               ((uint8_t *) buffer) + total_bytes_written,
++                               bytes_left_to_write);
+ 
+       if (bytes_written > 0)
+         {
+           total_bytes_written += bytes_written;
+           bytes_left_to_write -= bytes_written;
+         }
++      else if ((errno == ENOTSOCK))
++        is_a_socket = 0;
+       else if ((errno != EINTR))
+         break;
+     }
+Index: plymouth/configure.ac
+===================================================================
+--- plymouth.orig/configure.ac	2011-02-14 13:02:57.406349098 +0100
++++ plymouth/configure.ac	2011-02-14 13:03:48.456423969 +0100
+@@ -180,6 +180,8 @@
+ AC_CHECK_HEADERS([sys/io.h])
+ AM_CONDITIONAL([BUILD_VGA16FB], [test "x$ac_cv_header_sys_io_h" = xyes])
+ 
++AC_CHECK_DECLS([MSG_NOSIGNAL], [], [], [[ #include <sys/socket.h> ]])
++
+ # Turn on the additional warnings last, so -Werror doesn't affect other tests.
+ 
+ AC_DEFUN([PLYMOUTH_CC_TRY_FLAG], [

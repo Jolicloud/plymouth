@@ -1,3 +1,240 @@
+plymouth (0.8.2-2ubuntu23) natty-proposed; urgency=low
+
+  * details/plugin.c: On every key stroke, the "details" plugin in plymouth
+    clears only the current line before overwriting it with the password
+    prompt. If the prompt is multilined then the last line ends up being
+    overwritten but the previous lines are repeated. Re-printing only the
+    last line of the password prompt on every keystroke. (LP: #566818)
+  * details/plugin.c: Removed the explicit printing of ':'. Expected to be a
+    part of the prompt.
+
+ -- Surbhi Palande <surbhi.palande@canonical.com>  Thu, 21 Apr 2011 09:54:07 +0300
+
+plymouth (0.8.2-2ubuntu22) natty; urgency=low
+
+  * Install slave alternative for plymouth-theme-ubuntu-logo, telling GRUB
+    to set an aubergine background (LP: #696915).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 15 Apr 2011 14:35:17 +0100
+
+plymouth (0.8.2-2ubuntu21) natty; urgency=low
+
+  * Tolerate pre-multiarch versions of pango (LP: #741832).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 28 Mar 2011 11:07:14 +0100
+
+plymouth (0.8.2-2ubuntu20) natty; urgency=low
+
+  * Backport from upstream:
+    - [event-loop] Add reference count to event sources (with any luck, this
+      will fix LP: #553745).
+    - [event-loop] Handle more than 8 events at once (LP: #518926).
+    - [terminal] Force enter to output newline.
+    - [terminal] Add OPOST to tty attributes (LP: #546251).
+    - [terminal] Don't set ISTRIP in terminal attributes.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 24 Mar 2011 14:17:20 +0000
+
+plymouth (0.8.2-2ubuntu19) natty; urgency=low
+
+  * debian/initramfs-tools/hooks/plymouth: handle the nss_files modules
+    being in the multiarch library path instead of in /lib.
+  * Build-depend on dpkg-dev (>= 1.16.0~ubuntu4) so we can check the 
+    multiarch path at build time.
+  * Also handle multiarch paths for pango modules.
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Wed, 23 Mar 2011 15:18:47 -0700
+
+plymouth (0.8.2-2ubuntu18) natty; urgency=low
+
+  [ Colin Watson ]
+  * Split nouveau patches out from misc-changes.patch.
+  * If plymouth:force-drm is found on the kernel command line, use the drm
+    renderer even on nouveau.  This allows us to test fixes for LP #539655.
+    See also LP #533135.
+
+  [ Andy Whitcroft ]
+  * Make splash dependant on either a graphics device appearing or
+    udev-graphics-fallback completing.  (LP: #702090)
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 18 Mar 2011 22:35:41 +0000
+
+plymouth (0.8.2-2ubuntu17) natty; urgency=low
+
+  * Rework the avoid-sigpipe patch to first attempt to use send(), and
+    then fall back to write in case of ENOTSOCK. (LP: #718044).
+
+ -- Soren Hansen <soren@ubuntu.com>  Mon, 14 Feb 2011 13:30:00 +0100
+
+plymouth (0.8.2-2ubuntu16) natty; urgency=low
+
+  * Rename .plymouth files to .plymouth.in.
+  * Fold changes from debian-changes that went missing back into patches to
+    which they pertain.
+  * Refresh autoreconf.patch.
+
+ -- Soren Hansen <soren@ubuntu.com>  Sat, 12 Feb 2011 15:25:03 +0100
+
+plymouth (0.8.2-2ubuntu15) natty; urgency=low
+
+  * Pass MSG_NOSIGNAL when writing to Plymouth. This stops clients from
+    getting SIGPIPE'd when Plymouth goes away unexpectedly. (LP: 717153)
+  * Refresh autoreconf.patch.
+
+ -- Soren Hansen <soren@ubuntu.com>  Sat, 12 Feb 2011 15:00:00 +0100
+
+plymouth (0.8.2-2ubuntu14) natty; urgency=low
+
+  [ Mathieu Trudel-Lapierre ]
+  * Adjust the text plymouth themes to only ship a template, which then gets
+    used to generate the actual message from the output of lsb_release.
+  * debian/plymouth-theme-kubuntu-text.postinst,
+    debian/plymouth-theme-ubuntu-text.postinst:
+    - Build on the changes to set the text and colors for the -text themes via
+      settings; attempt to properly set the current Ubuntu version according to
+      what LSB tells us.
+  * debian/plymouth-theme-kubuntu-text.prerm,
+    debian/plymouth-theme-ubuntu-text.prerm:
+    - Clean up the actual theme config file for ubuntu-text themes since it's
+      generated at install time.
+  * debian/plymouth-theme-kubuntu-text.postrm,
+    debian/plymouth-theme-ubuntu-text.postrm:
+    - Don't remove /lib/plymouth and /lib/plymouth/themes, it will be done by
+      the plymouth package itself on removal.
+
+  [ Steve Langasek ]
+  * Clean up the prerm scripts:
+    - don't use this horrible case $1 meme that infests maintainer 
+      scripts everywhere (including the other scripts in this package :)
+    - use rm -f instead of ignoring failures
+    - avoid useless exit 0 at the end
+  * While we're at it, clean up the other postrm scripts by moving
+    update-alternatives calls to new prerms, and clean up the unnecessary
+    boilerplate in the remaining postrms.
+  * debian/initramfs-tools/hooks/plymouth: don't overwrite /etc/passwd in
+    the initramfs if it's already present, since ours is just there as an
+    NSS stub and some other hooks may care about the contents.  Also, as
+    long as we're setting this up, use /bin/sh for the shell instead of
+    /bin/bash since that actually exists in the initramfs.  LP: #715482
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Wed, 09 Feb 2011 13:26:13 -0800
+
+plymouth (0.8.2-2ubuntu13) natty; urgency=low
+
+  * Switch dependency from libdrm-nouveau1 to libdrm-nouveau1a.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 26 Jan 2011 02:30:16 +0000
+
+plymouth (0.8.2-2ubuntu12) natty; urgency=low
+
+  * Build-depend on libdbus-1-dev and libncursesw5-dev for the Upstart
+    bridge.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 21 Jan 2011 19:09:43 +0000
+
+plymouth (0.8.2-2ubuntu11) natty; urgency=low
+
+  * Print messages when Upstart jobs start or stop (LP: #616403).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 21 Jan 2011 18:10:46 +0000
+
+plymouth (0.8.2-2ubuntu10) natty; urgency=low
+
+  [ Martin Pitt ]
+  * gcc45-arith-workaround.patch: Add upstream bug link.
+
+  [ Colin Watson ]
+  * Backport a couple of patches from upstream to make debugging less
+    painful:
+    - Fix parsing of plymouth:debug=file:.
+    - Handle plymouth:splash or plymouth:debug as last argument.
+  * Rearrange patch handling in a way that doesn't cause dpkg-source to
+    entirely shuffle the contents of debian/patches/debian-changes every
+    time we upload, and to make it easier to merge in future:
+    - Split debian-changes (mostly) into separate patches.  A small
+      misc-changes.patch file remains with some patches I didn't have time
+      to analyse, but the bulk of this can now be handled with separate
+      quilt operations.  (As usual, if you don't use quilt, patches will end
+      up in a debian-changes patch at the end of the patch series.)
+    - Remove .pc from revision control; it's too noisy and hard to keep
+      consistent.  Use
+      http://people.canonical.com/~cjwatson/dpkg-quilt-setup after checking
+      out from revision control to set up quilt.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 21 Jan 2011 14:10:49 +0000
+
+plymouth (0.8.2-2ubuntu9) natty; urgency=low
+
+  [ Steve Langasek ]
+  * debian/control: set Vcs-Bzr to forestall future mis-uploads
+
+  [ Martin Pitt ]
+  * Add gcc45-arith-workaround.patch: Work around a gcc-4.5 behaviour
+    change/bug(?). Also, this change is actually correct, as the arithmethics
+    can easily overflow a 16 bit value. (LP: #685352)
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Fri, 14 Jan 2011 12:09:05 -0600
+
+plymouth (0.8.2-2ubuntu8) natty; urgency=low
+
+  * Adjust ubuntu-logo background colour very slightly: the official "dark
+    aubergine" background colour value is #2c001e, whose red component is
+    closer to 17% than 16%.  The difference is noticeable when GRUB is set
+    up to show its own background colour.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 13 Dec 2010 13:57:26 +0000
+
+plymouth (0.8.2-2ubuntu7) natty; urgency=low
+
+  [ Steve Langasek ]
+  * Refactor ubuntu-text theme to allow setting colors and text via settings
+    in the plymouth theme file, and have plymouth-theme-kubuntu-text depend
+    on ubuntu-text instead of duplicating the code.
+  * Bump the version strings from 10.10 to 11.04.  LP: #683994.
+
+  [ Michael Terry ]
+  * debian/plymouth.plymouth-stop.upstart,
+    debian/plymouth.upstart:
+    - Recognize uxlaunch as a display manager. (LP: #609163)
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Fri, 03 Dec 2010 15:06:17 -0800
+
+plymouth (0.8.2-2ubuntu6) natty; urgency=low
+
+  * debian/plymouth.plymouth-stop.upstart:
+  * debian/plymouth.upstart:
+    - Add LightDM
+
+ -- Robert Ancell <robert.ancell@canonical.com>  Wed, 01 Dec 2010 14:52:57 +1100
+
+plymouth (0.8.2-2ubuntu5.1) maverick-proposed; urgency=low
+
+  * Generate a dummy NSS stack in the initrd to suppress a glib warning
+    generated by the label control (LP: #649917).
+
+ -- Evan Broder <evan@ebroder.net>  Fri, 29 Oct 2010 06:39:20 -0700
+
+plymouth (0.8.2-2ubuntu5) maverick; urgency=low
+
+  * Add kubuntu-text theme, closes LP: #613636
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Fri, 24 Sep 2010 13:07:19 +0100
+
+plymouth (0.8.2-2ubuntu4) maverick; urgency=low
+
+  * src/plugins/splash/details/plugin.c: Implement display_message, either
+    by displaying it immediately or by queueing it for later display in the
+    event that we're already waiting for user input (LP: #563916).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 08 Sep 2010 01:20:35 +0100
+
+plymouth (0.8.2-2ubuntu3) maverick; urgency=low
+
+  * src/plugins/splash/ubuntu-text/plugin.c: Change Ubuntu version to 10.10
+    (LP: #588633).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 25 Jun 2010 15:56:04 +0100
+
 plymouth (0.8.2-2ubuntu2) lucid; urgency=low
 
   * Don't call ply_boot_client_process_pending_requests on flush, because

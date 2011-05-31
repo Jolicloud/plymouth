@@ -18,6 +18,12 @@
 
 case "$1" in
     configure)
+	sed -re \
+		"/\[ubuntu-text\]/ {
+			N;
+			s/(title=Ubuntu ).*\$/\1$(lsb_release -rs)/
+		}" /lib/plymouth/themes/ubuntu-text/ubuntu-text.plymouth.in \
+			> /lib/plymouth/themes/ubuntu-text/ubuntu-text.plymouth
 	update-alternatives \
 		--install /lib/plymouth/themes/text.plymouth text.plymouth \
 		/lib/plymouth/themes/ubuntu-text/ubuntu-text.plymouth 50

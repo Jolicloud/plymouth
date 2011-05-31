@@ -1,4 +1,5 @@
 bin/plymouth
+bin/plymouth-upstart-bridge
 sbin/plymouthd
 lib/plymouth/script.so
 lib/plymouth/renderers/drm.so

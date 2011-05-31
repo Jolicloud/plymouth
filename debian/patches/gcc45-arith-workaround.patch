@@ -1,0 +1,18 @@
+Description: Work around a gcc-4.5 behaviour change/bug(?). Also, this change is actually correct, as the arithmethics can easily overflow a 16 bit value.
+Author: Martin Pitt <martin.pitt@ubuntu.com>
+Bug: https://bugs.freedesktop.org//show_bug.cgi?id=33129
+Bug-Ubuntu: https://launchpad.net/bugs/685352
+
+Index: b/src/libply-splash-core/ply-pixel-buffer.c
+===================================================================
+--- a/src/libply-splash-core/ply-pixel-buffer.c
++++ b/src/libply-splash-core/ply-pixel-buffer.c
+@@ -65,7 +65,7 @@
+     {
+       uint8_t alpha_1, red_1, green_1, blue_1;
+       uint8_t red_2, green_2, blue_2;
+-      uint_least16_t red, green, blue;
++      uint32_t red, green, blue;
+ 
+       alpha_1 = (uint8_t) (pixel_value_1 >> 24);
+       red_1 = (uint8_t) (pixel_value_1 >> 16);

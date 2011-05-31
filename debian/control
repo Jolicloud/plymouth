@@ -1,13 +1,14 @@
 Source: plymouth
 Section: x11
 Priority: optional
-Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Build-Depends: debhelper (>= 7.3.15ubuntu3), libpng12-dev, libcairo2-dev, libgtk2.0-dev, libpango1.0-dev, autotools-dev, libdrm-dev
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Build-Depends: debhelper (>= 7.3.15ubuntu3), libpng12-dev, libcairo2-dev, libgtk2.0-dev, libpango1.0-dev, autotools-dev, libdrm-dev, libdbus-1-dev, libncursesw5-dev, dpkg-dev (>= 1.16.0~ubuntu4)
 Standards-Version: 3.8.3.0
+Vcs-Bzr: lp:ubuntu/plymouth
 
 Package: plymouth
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libplymouth2 (= ${binary:Version}), libdrm-intel1 | libdrm-radeon1 | libdrm-nouveau1, udev (>= 149-2), mountall (>= 2.0), initramfs-tools
+Depends: ${shlibs:Depends}, ${misc:Depends}, libplymouth2 (= ${binary:Version}), libdrm-intel1 | libdrm-radeon1 | libdrm-nouveau1a, udev (>= 166-0ubuntu4), mountall (>= 2.0), initramfs-tools
 Recommends: plymouth-theme-ubuntu-text | plymouth-theme
 Conflicts: usplash
 Breaks: gdm (<< 2.29.1-0ubuntu4), kdm (<< 4:4.4.2-0ubuntu6), ubuntustudio-plymouth-theme (<= 0.38), xubuntu-plymouth-theme (<< 10.04.4), lubuntu-plymouth-theme (<= 0.4)
@@ -184,3 +185,15 @@ Description: graphical boot animation and logger - ubuntu-logo theme
  This package contains the default ubuntu-text text theme used when no
  support for a graphical theme is found on your system.
 
+Package: plymouth-theme-kubuntu-text
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, plymouth, plymouth-theme-ubuntu-text
+Provides: plymouth-theme
+Replaces: plymouth (<< 0.8.1-1~)
+Description: graphical boot animation and logger - kubuntu-text theme
+ Plymouth is an application that runs very early in the boot process
+ (even before the root filesystem is mounted!) that provides a graphical
+ boot animation while the boot process happens in the background.
+ .
+ This package contains the default kubuntu-text text theme used when no
+ support for a graphical theme is found on your system.

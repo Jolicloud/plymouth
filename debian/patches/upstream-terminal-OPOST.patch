@@ -1,0 +1,23 @@
+Origin: commit:0430e51224ee618c733e4657ec94a2093793f59b
+Author: Ray Strode <rstrode@redhat.com>
+Subject: [terminal] Add OPOST to tty attributes
+
+ONLCR apparently requires OPOST to work.
+
+This should prevent weird "stair stepping"
+effects when non-plymouth things try to
+use the terminal.
+
+Index: b/src/libply-splash-core/ply-terminal.c
+===================================================================
+--- a/src/libply-splash-core/ply-terminal.c
++++ b/src/libply-splash-core/ply-terminal.c
+@@ -183,7 +183,7 @@
+   term_attributes.c_iflag |= ICRNL;
+ 
+   /* Make \n return go to the beginning of the next line */
+-  term_attributes.c_oflag |= ONLCR;
++  term_attributes.c_oflag |= ONLCR | OPOST;
+ 
+   if (tcsetattr (terminal->fd, TCSANOW, &term_attributes) != 0)
+     return false;

@@ -1,0 +1,14 @@
+# plymouth-upstart-bridge - Bridge Upstart state changes into Plymouth
+#
+# This helper process receives Upstart state changes over D-Bus and sends
+# corresponding messages to Plymouth.
+
+description	"Bridge Upstart state changes into Plymouth"
+
+start on (started dbus
+          or runlevel [06])
+stop on stopping plymouth
+
+console output
+
+exec plymouth-upstart-bridge

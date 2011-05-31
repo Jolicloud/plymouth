@@ -48,6 +48,19 @@ if [ -e "$THEME" ]; then
 	# if we have a non-text theme, make sure we copy all the support libs
 	copy_exec /lib/plymouth/label.so /lib/plymouth/
 
+	# suppress a warning in glib (which the label control uses)
+	# about uid 0 by building a dummy NSS stack (LP #649917)
+	if ! grep -q '^root:' ${DESTDIR}/etc/passwd 2>/dev/null; then
+	    echo 'root:x:0:0:root:/root:/bin/sh' >${DESTDIR}/etc/passwd
+	fi
+	echo 'passwd: files' >${DESTDIR}/etc/nsswitch.conf
+	for lib in /lib/#DEB_HOST_MULTIARCH#/libnss_files* /lib/libnss_files*
+	do
+	    if [ -e "$lib" ]; then
+		copy_exec $lib /lib
+	    fi
+	done
+
 	# output renderers
 	copy_exec /lib/plymouth/renderers/frame-buffer.so /lib/plymouth/renderers/
 	copy_exec /lib/plymouth/renderers/drm.so /lib/plymouth/renderers/
@@ -59,11 +72,17 @@ if [ -e "$THEME" ]; then
 	# any text
 	mkdir -p ${DESTDIR}/usr/share/fonts/truetype/ttf-dejavu
 	mkdir -p ${DESTDIR}/etc/fonts/conf.d
-	mkdir -p ${DESTDIR}/usr/lib/pango/1.6.0/module-files.d
-	mkdir -p ${DESTDIR}/usr/lib/pango/1.6.0/modules
 	cp /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf ${DESTDIR}/usr/share/fonts/truetype/ttf-dejavu/
 	cp /etc/fonts/fonts.conf ${DESTDIR}/etc/fonts/fonts.conf
 	cp -L /etc/fonts/conf.d/60-latin.conf ${DESTDIR}/etc/fonts/conf.d
-	cp /usr/lib/pango/1.6.0/module-files.d/libpango1.0-0.modules ${DESTDIR}/usr/lib/pango/1.6.0/module-files.d/
-	cp /usr/lib/pango/1.6.0/modules/pango-basic-fc.so ${DESTDIR}/usr/lib/pango/1.6.0/modules/pango-basic-fc.so
+	if [ -e /usr/lib/pango/1.6.0/module-files.d/libpango1.0-0.modules ]; then
+		# pre-multiarch fallback
+		PANGO_DIR=/usr/lib/pango/1.6.0
+	else
+		PANGO_DIR=/usr/lib/#DEB_HOST_MULTIARCH#/pango/1.6.0
+	fi
+	mkdir -p ${DESTDIR}${PANGO_DIR}/module-files.d
+	mkdir -p ${DESTDIR}${PANGO_DIR}/modules
+	cp ${PANGO_DIR}/module-files.d/libpango1.0-0.modules ${DESTDIR}${PANGO_DIR}/module-files.d/
+	cp ${PANGO_DIR}/modules/pango-basic-fc.so ${DESTDIR}${PANGO_DIR}/modules/pango-basic-fc.so
 fi

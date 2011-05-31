@@ -1,0 +1,19 @@
+Description: Treat lbm-nouveau as equivalent to nouveau (Ubuntu-specific)
+Author: Robert Hooker <sarvatt@ubuntu.com>
+Forwarded: not-needed
+Last-Update: 2011-03-18
+
+Index: b/src/plugins/renderers/drm/plugin.c
+===================================================================
+--- a/src/plugins/renderers/drm/plugin.c
++++ b/src/plugins/renderers/drm/plugin.c
+@@ -454,7 +454,8 @@
+       backend->driver_interface = ply_renderer_radeon_driver_get_interface ();
+       backend->driver_supports_mapping_console = false;
+     }
+-  else if (strcmp (driver_name, "nouveau") == 0)
++  else if (strcmp (driver_name, "nouveau") == 0
++           || strcmp (driver_name, "lbm-nouveau") == 0)
+     {
+       backend->driver_interface = ply_renderer_nouveau_driver_get_interface ();
+       backend->driver_supports_mapping_console = false;

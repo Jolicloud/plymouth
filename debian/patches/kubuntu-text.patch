@@ -1,0 +1,50 @@
+Description: Add kubuntu-text theme
+Author: Jonathan Riddell <jriddell@ubuntu.com>
+Forwarded: not-needed
+Last-Update: 2011-01-21
+
+Index: plymouth/configure.ac
+===================================================================
+--- plymouth.orig/configure.ac
++++ plymouth/configure.ac
+@@ -296,6 +296,7 @@
+            themes/script/Makefile
+            themes/ubuntu-logo/Makefile
+            themes/ubuntu-text/Makefile
++           themes/kubuntu-text/Makefile
+            images/Makefile
+ 	   scripts/plymouth-generate-initrd
+ 	   scripts/plymouth-populate-initrd
+Index: plymouth/themes/Makefile.am
+===================================================================
+--- plymouth.orig/themes/Makefile.am
++++ plymouth/themes/Makefile.am
+@@ -1,2 +1,2 @@
+-SUBDIRS = spinfinity fade-in text details solar glow script ubuntu-logo ubuntu-text
++SUBDIRS = spinfinity fade-in text details solar glow script ubuntu-logo ubuntu-text kubuntu-text
+ MAINTAINERCLEANFILES = Makefile.in
+Index: plymouth/themes/kubuntu-text/kubuntu-text.plymouth.in
+===================================================================
+--- /dev/null
++++ plymouth/themes/kubuntu-text/kubuntu-text.plymouth.in
+@@ -0,0 +1,11 @@
++[Plymouth Theme]
++Name=Kubuntu Text
++Description=Text mode theme based on kubuntu-logo theme
++ModuleName=ubuntu-text
++
++[ubuntu-text]
++title=Kubuntu 11.04
++black=0x0078C2
++white=0xffffff
++brown=0x009DFD
++blue=0x988592
+Index: plymouth/themes/kubuntu-text/Makefile.am
+===================================================================
+--- /dev/null
++++ plymouth/themes/kubuntu-text/Makefile.am
+@@ -0,0 +1,4 @@
++themedir = $(datadir)/plymouth/themes/kubuntu-text
++dist_theme_DATA = kubuntu-text.plymouth.in
++
++MAINTAINERCLEANFILES = Makefile.in

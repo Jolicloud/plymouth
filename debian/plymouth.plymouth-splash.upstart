@@ -15,6 +15,6 @@ description	"Userspace bootsplash"
 start on (started plymouth
           and (graphics-device-added PRIMARY_DEVICE_FOR_DISPLAY=1
                or drm-device-added PRIMARY_DEVICE_FOR_DISPLAY=1
-               or stopped udevtrigger))
+               or stopped udev-fallback-graphics))
 
 exec /bin/plymouth show-splash

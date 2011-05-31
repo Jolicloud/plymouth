@@ -18,11 +18,15 @@
 
 case "$1" in
     configure)
+	sed -re \
+		"/\[ubuntu-text\]/ {
+			N;
+			s/(title=Kubuntu ).*\$/\1$(lsb_release -rs)/
+		}" /lib/plymouth/themes/kubuntu-text/kubuntu-text.plymouth.in \
+			> /lib/plymouth/themes/kubuntu-text/kubuntu-text.plymouth
 	update-alternatives \
-		--install /lib/plymouth/themes/default.plymouth default.plymouth \
-		/lib/plymouth/themes/ubuntu-logo/ubuntu-logo.plymouth 100 \
-		--slave /lib/plymouth/themes/default.grub default.plymouth.grub \
-		/lib/plymouth/themes/ubuntu-logo/ubuntu-logo.grub
+		--install /lib/plymouth/themes/text.plymouth text.plymouth \
+		/lib/plymouth/themes/kubuntu-text/kubuntu-text.plymouth 60
 
 	if which update-initramfs >/dev/null 2>&1
 	then
