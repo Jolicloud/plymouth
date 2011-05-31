@@ -218,7 +218,7 @@ ply_terminal_set_buffered_input (ply_terminal_t *terminal)
    */
   if (!terminal->original_term_attributes_saved || !(terminal->original_term_attributes.c_lflag & ICANON))
     {
-      term_attributes.c_iflag |= BRKINT | IGNPAR | ISTRIP | ICRNL | IXON;
+      term_attributes.c_iflag |= BRKINT | IGNPAR | ICRNL | IXON;
       term_attributes.c_oflag |= OPOST;
       term_attributes.c_lflag |= ECHO | ICANON | ISIG | IEXTEN;
 

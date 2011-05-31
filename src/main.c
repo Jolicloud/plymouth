@@ -1766,7 +1766,7 @@ on_crash (int signum)
 
     tcgetattr (fd, &term_attributes);
 
-    term_attributes.c_iflag |= BRKINT | IGNPAR | ISTRIP | ICRNL | IXON;
+    term_attributes.c_iflag |= BRKINT | IGNPAR | ICRNL | IXON;
     term_attributes.c_oflag |= OPOST;
     term_attributes.c_lflag |= ECHO | ICANON | ISIG | IEXTEN;
 
