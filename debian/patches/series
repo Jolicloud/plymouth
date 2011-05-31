@@ -1,4 +1,3 @@
-ubuntu_details.patch
 details_removeSeparator.patch
 misc-changes.patch
 vga16fb-renderer.patch
