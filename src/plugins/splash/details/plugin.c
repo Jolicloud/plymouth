@@ -73,6 +73,7 @@ struct _ply_boot_splash_plugin
   ply_boot_splash_mode_t mode;
   ply_list_t *views;
   ply_boot_splash_display_type_t state;
+  ply_list_t *messages;
 
 };
 
@@ -120,6 +121,31 @@ free_views (ply_boot_splash_plugin_t *plugin)
   plugin->views = NULL;
 }
 
+static void
+free_messages (ply_boot_splash_plugin_t *plugin)
+{
+  ply_list_node_t *node;
+
+  node = ply_list_get_first_node (plugin->messages);
+
+  while (node != NULL)
+    {
+      ply_list_node_t *next_node;
+      char *message;
+
+      message = ply_list_node_get_data (node);
+      next_node = ply_list_get_next_node (plugin->messages, node);
+
+      free (message);
+      ply_list_remove_node (plugin->messages, node);
+
+      node = next_node;
+    }
+
+  ply_list_free (plugin->messages);
+  plugin->messages = NULL;
+}
+
 static ply_boot_splash_plugin_t *
 create_plugin (ply_key_file_t *key_file)
 {
@@ -130,6 +156,7 @@ create_plugin (ply_key_file_t *key_file)
   plugin = calloc (1, sizeof (ply_boot_splash_plugin_t));
   plugin->views = ply_list_new ();
   plugin->state = PLY_BOOT_SPLASH_DISPLAY_NORMAL;
+  plugin->messages = ply_list_new ();
   return plugin;
 }
 
@@ -141,6 +168,7 @@ destroy_plugin (ply_boot_splash_plugin_t *plugin)
   if (plugin == NULL)
     return;
 
+  free_messages (plugin);
   free_views (plugin);
 
   free (plugin);
@@ -203,7 +231,10 @@ add_text_display (ply_boot_splash_plugin_t *plugin,
 
   terminal = ply_text_display_get_terminal (view->display);
   if (ply_terminal_open (terminal))
-    ply_terminal_activate_vt (terminal);
+    {
+      ply_terminal_set_mode (terminal, PLY_TERMINAL_MODE_TEXT);
+      ply_terminal_activate_vt (terminal);
+    }
 
   ply_list_append_data (plugin->views, view);
 }
@@ -294,10 +325,28 @@ hide_splash_screen (ply_boot_splash_plugin_t *plugin,
 static void
 display_normal (ply_boot_splash_plugin_t *plugin)
 {
+  ply_list_node_t *node;
+
   if (plugin->state != PLY_BOOT_SPLASH_DISPLAY_NORMAL)
     write_on_views (plugin, "\r\n", strlen ("\r\n"));
 
   plugin->state = PLY_BOOT_SPLASH_DISPLAY_NORMAL;
+
+  node = ply_list_get_first_node (plugin->messages);
+  while (node != NULL)
+    {
+      const char *message;
+      ply_list_node_t *next_node;
+
+      message = ply_list_node_get_data (node);
+      next_node = ply_list_get_next_node (plugin->messages, node);
+
+      write_on_views (plugin, message, strlen (message));
+      write_on_views (plugin, "\r\n", strlen ("\r\n"));
+
+      ply_list_remove_node (plugin->messages, node);
+      node = next_node;
+    }
 }
 
 /* @shorten_prompt:
@@ -371,6 +420,26 @@ display_question (ply_boot_splash_plugin_t *plugin,
   write_on_views (plugin, entry_text, strlen (entry_text));
 }
 
+static void
+display_message (ply_boot_splash_plugin_t *plugin,
+                 const char               *message)
+{
+  const char *message_to_display;
+
+  if (!strncmp (message, "keys:", strlen ("keys:")))
+    message_to_display = message + strlen ("keys:");
+  else
+    message_to_display = message;
+
+  if (plugin->state == PLY_BOOT_SPLASH_DISPLAY_NORMAL)
+    {
+      write_on_views (plugin, message_to_display, strlen (message_to_display));
+      write_on_views (plugin, "\r\n", strlen ("\r\n"));
+    }
+  else
+    ply_list_append_data (plugin->messages, strdup (message_to_display));
+}
+
 ply_boot_splash_plugin_interface_t *
 ply_boot_splash_plugin_get_interface (void)
 {
@@ -387,6 +456,7 @@ ply_boot_splash_plugin_get_interface (void)
       .display_normal = display_normal,
       .display_password = display_password,
       .display_question = display_question,      
+      .display_message = display_message,
     };
 
   return &plugin_interface;
